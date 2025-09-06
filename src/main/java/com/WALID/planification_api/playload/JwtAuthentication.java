@@ -16,6 +16,7 @@ public class JwtAuthentication {
 	private String prenom;
 	private Long idUser;
 	private String first;
-	private List<String> roles;
+	//private List<String> roles;
+	private String role;
 
 }

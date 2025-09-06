@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.entities.ListAttribut;
+import com.WALID.planification_api.playload.ResourceNotFoundException;
 import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.ListAttributDTO;
 import com.WALID.planification_api.repositories.Parametrage.ListAttributRepository;
@@ -29,6 +30,14 @@ public class ListAttributeServicesImp implements InListAttributeServices{
 		listAttribut.setValue(listAttributDTO.getValue());
 		listAttribut.setListNameApi(listAttributDTO.getListNameApi());
 		return mapToDto(listAttributRepository.save(listAttribut));
+	}
+	
+	@Override
+	public void deleteAttributDTO(Long id) {
+		ListAttribut listAttribut = listAttributRepository.findByIdAndStatut(id, GlobalConstant.STATUT_ACTIF).orElseThrow(() -> new ResourceNotFoundException("Attribute","id",id));
+		
+		listAttribut.setStatut(GlobalConstant.STATUT_DELETE);
+		listAttributRepository.save(listAttribut);
 	}
 
 	private ListAttributDTO mapToDto(ListAttribut x)

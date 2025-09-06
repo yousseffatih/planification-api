@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.playload.MessageResponse;
 import com.WALID.planification_api.playload.DTO.ClassesDTO;
+import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.repositories.Parametrage.ClassesRepository;
 import com.WALID.planification_api.services.Classes.InClassesServices;
 
@@ -42,6 +43,14 @@ public class ClassesController {
         List<ClassesDTO> classesDTOs = classesServices.getAllClasses();
         return new ResponseEntity<>(classesDTOs , HttpStatus.OK);
     }
+    
+    @GetMapping("/listClasses")
+    public ResponseEntity<List<ListAttributAUTO>> getListModules()
+    {
+        List<ListAttributAUTO> modulesDTOs = classesServices.getClassesListApi();
+        return new ResponseEntity<>(modulesDTOs , HttpStatus.OK);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ClassesDTO> getClasseById(@PathVariable Long id) {

@@ -1,9 +1,9 @@
 package com.WALID.planification_api.playload.DTO;
 
 import java.util.Date;
-import java.util.Set;
+//import java.util.Set;
 
-import com.WALID.planification_api.entities.Roles;
+//import com.WALID.planification_api.entities.Roles;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -48,5 +48,10 @@ public class UsersDTO {
    	@NotEmpty(message = "Prénom est obligatoire!")
     private String prenom;
 
-    private Set<Roles> roles;
+    //private Set<Roles> roles;
+    
+    @NotNull(message = "Role est obligatoire!")
+    private Long idRole;
+    
+    private String libelleRole; 
 }

@@ -14,13 +14,19 @@ public interface ProfesseurRepository extends JpaRepository<Professeur , Long>{
 	
     @Query("select c"
 			+ " from Professeur c "
-			+ " where c.statut in ('actif') "
+			+ " where c.statut in ('actif', 'inActif') "
             + " order by c.dateCreation ")
 	List<Professeur> findAllWithStatus();
+    
+    @Query("select c"
+			+ " from Professeur c "
+			+ " where c.statut in ('actif') "
+            + " order by c.dateCreation ")
+	List<Professeur> getProffesseurListApi();
 
     @Query("select c"
 			+ " from Professeur c "
-			+ " where c.statut in ('actif')"
+			+ " where c.statut in ('actif', 'inActif')"
 			+ " and c.id = :val ")
 	Optional<Professeur> findByIdStatut(@Param("val") Long val);
 
@@ -32,7 +38,7 @@ public interface ProfesseurRepository extends JpaRepository<Professeur , Long>{
 			+ " else false end "
 			+ " from Professeur c "
 			+ " where lower(c.nom) like lower(:val) "
-			+ " and c.statut in('actif') "
+			+ " and c.statut in('actif', 'inActif') "
 			+ " and c.id <> :id ")
 	boolean existsByNomModif(@Param("val") String val, @Param("id") Long id);
 }

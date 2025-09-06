@@ -23,9 +23,17 @@ public class ProfesseurDTO {
 		@NotEmpty(message = "Nom est obligatoire!")
 	    private String nom;
 
-	    @NotNull(message = "Prénom scolaire est obligatoire!")
-		@NotEmpty(message = "Prénom scolaire est obligatoire!")
+	    @NotNull(message = "Prénom est obligatoire!")
+		@NotEmpty(message = "Prénom est obligatoire!")
 	    private String  prenom;
+	    
+	    @NotNull(message = "Email est obligatoire!")
+		@NotEmpty(message = "Email est obligatoire!")
+	    private String email;
+	    
+	    @NotNull(message = "Numéro est obligatoire!")
+		@NotEmpty(message = "Numéro est obligatoire!")
+	    private String numeroTele;
 
 	    @JsonFormat(pattern = "dd/MM/yyyy")
 	    private Date dateCreation;

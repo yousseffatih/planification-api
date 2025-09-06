@@ -3,10 +3,13 @@ package com.WALID.planification_api.services.Classes;
 import java.util.List;
 
 import com.WALID.planification_api.playload.DTO.ClassesDTO;
+import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 
 
 public interface  InClassesServices {
     public List<ClassesDTO> getAllClasses();
+    
+    public List<ListAttributAUTO> getClassesListApi();
 
     public ClassesDTO getClasseById(Long id);
 

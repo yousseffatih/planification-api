@@ -27,4 +27,7 @@ public abstract class ClassEntity {
 
 	@Column(name = "DATE_MODIFICATION")
 	protected Date dateModification;
+	
+	protected String motif;
+	
 }

@@ -14,13 +14,19 @@ public interface ModulesRepository extends JpaRepository<Modules,Long>{
 
 	   @Query("select m"
 				+ " from Modules m "
-				+ " where m.statut in ('actif') "
+				+ " where m.statut in ('actif', 'inActif') "
 	            + " order by m.dateCreation ")
 		List<Modules> findAllWithStatus();
+	   
+	   @Query("select m"
+				+ " from Modules m "
+				+ " where m.statut in ('actif') "
+	            + " order by m.dateCreation ")
+		List<Modules> findAllWithStatusListApi();
 
 	    @Query("select m"
 				+ " from Modules m "
-				+ " where m.statut in ('actif')"
+				+ " where m.statut in ('actif','inActif')"
 				+ " and m.id = :val ")
 		Optional<Modules> findByIdStatut(@Param("val") Long val);
 
@@ -32,7 +38,7 @@ public interface ModulesRepository extends JpaRepository<Modules,Long>{
 				+ " else false end "
 				+ " from Modules m "
 				+ " where lower(m.nom) like lower(:val) "
-				+ " and m.statut in('actif') "
+				+ " and m.statut in('actif', 'inActif') "
 				+ " and m.id <> :id ")
 		boolean existsByNomModif(@Param("val") String val, @Param("id") Long id);
 }

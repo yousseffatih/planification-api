@@ -7,7 +7,9 @@ import com.WALID.planification_api.playload.DTO.ProfesseurDTO;
 
 
 public interface  InProfesseurServices {
+	
     public List<ProfesseurDTO>AllProfesseur();
+    
 
     public ProfesseurDTO getProfesseurById(Long id);
 

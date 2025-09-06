@@ -15,13 +15,20 @@ public interface  ClassesRepository extends JpaRepository<Classes, Long>{
 
     @Query("select c"
 			+ " from Classes c "
-			+ " where c.statut in ('actif') "
+			+ " where c.statut in ('actif', 'inActif') "
             + " order by c.dateCreation ")
 	List<Classes> findAllWithStatus();
+    
+    @Query("select c"
+			+ " from Classes c "
+			+ " where c.statut in ('actif') "
+            + " order by c.dateCreation ")
+	List<Classes> getClassesListApi();
+
 
     @Query("select c"
 			+ " from Classes c "
-			+ " where c.statut in ('actif')"
+			+ " where c.statut in ('actif',  'inActif')"
 			+ " and c.id = :val ")
 	Optional<Classes> findByIdStatut(@Param("val") Long val);
 
@@ -33,7 +40,7 @@ public interface  ClassesRepository extends JpaRepository<Classes, Long>{
 			+ " else false end "
 			+ " from Classes c "
 			+ " where lower(c.nom) like lower(:val) "
-			+ " and c.statut in('actif') "
+			+ " and c.statut in('actif' , 'inActif') "
 			+ " and c.id <> :id ")
 	boolean existsByNomModif(@Param("val") String val, @Param("id") Long id);
 }

@@ -56,6 +56,8 @@ public class ProfesseurServiceImp implements InProfesseurServices{
 
     	prof.setDateCreation(new Date());
     	prof.setStatut(GlobalConstant.STATUT_ACTIF);
+    	prof.setNumeroTele(professeurDTO.getNumeroTele());
+    	prof.setEmail(professeurDTO.getEmail());
     	//prof.setStatut(professeurDTO.getStatut());
     	prof.setNom(professeurDTO.getNom());
     	prof.setPrenom(professeurDTO.getPrenom());
@@ -80,7 +82,9 @@ public class ProfesseurServiceImp implements InProfesseurServices{
     	
     	professeur.setNom(professeurDTO.getNom());
     	professeur.setPrenom(professeurDTO.getPrenom());
-    	//professeur.setStatut(professeurDTO.getStatut());
+    	professeur.setNumeroTele(professeurDTO.getNumeroTele());
+    	professeur.setEmail(professeurDTO.getEmail());
+    	professeur.setStatut(professeurDTO.getStatut());
     	professeur.setDateModification(new Date());
     	professeur.setTypeProf(typeProfAttribut);
     	Professeur cls = professeurRepository.save(professeur);
@@ -93,8 +97,11 @@ public class ProfesseurServiceImp implements InProfesseurServices{
         dto.setId(x.getId());
         dto.setNom(x.getNom());
         dto.setPrenom(x.getPrenom());
+        dto.setEmail(x.getEmail());
+        dto.setNumeroTele(x.getNumeroTele());
         dto.setIdTypeProf(x.getTypeProf().getId());
         dto.setLibelleTypeProf(x.getTypeProf().getLibelle());
+        
 
         dto.setStatut(x.getStatut());
         dto.setDateCreation(x.getDateCreation());
@@ -107,7 +114,7 @@ public class ProfesseurServiceImp implements InProfesseurServices{
     {
 		ListAttributAUTO dto = new ListAttributAUTO();
         dto.setId(x.getId());
-        dto.setLibelle(x.getNom());
+        dto.setLibelle(x.getNom() + " " +  x.getPrenom());
 
         return dto;
     }

@@ -10,5 +10,14 @@ public class GlobalConstant {
 
 	public static final int HTTPSTATUT_RESPONSE_ERORR = 450;
 	public static final int HTTPSTATUT_RESPONSE_ERORR_NOT_FOUND = 404;
+	
+	public static String formatName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return "";
+        }
+        return name.trim()
+                   .toLowerCase()
+                   .replaceAll("\\s+", "_");
+    }
 
 }

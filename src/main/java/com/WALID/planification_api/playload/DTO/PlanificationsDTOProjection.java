@@ -16,11 +16,11 @@ public interface PlanificationsDTOProjection {
     @JsonFormat(pattern = "dd/MM/yyyy")
     Date getDatePlanification();
     
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    LocalDateTime getTimeDebut();
+    //@JsonFormat(pattern = "HH:mm")
+    String getTimeDebut();
     
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    LocalDateTime getTimeFin();
+    //@JsonFormat(pattern = "HH:mm")
+    String getTimeFin();
     
     String getProf();
     
@@ -44,5 +44,5 @@ public interface PlanificationsDTOProjection {
     
     String getLiblleTypePlanification();
     
-    String getIdTypePlanification();
+    Long getIdTypePlanification();
 }

@@ -64,6 +64,7 @@ public class Planifications extends ClassEntity{
     @JoinColumn(name="USER_ID")
 	private Users user;
 	
+	
 	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="Type_planification_ID")
 	private ListAttribut typePlanification;

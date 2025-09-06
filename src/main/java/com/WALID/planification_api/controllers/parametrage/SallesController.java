@@ -46,6 +46,14 @@ public class SallesController {
         List<SallesDTO> rolesDTOs = sallesServices.getAllSalles();
         return new ResponseEntity<>(rolesDTOs , HttpStatus.OK);
     }
+	
+	@GetMapping("/listSalles")
+    public ResponseEntity<List<ListAttributAUTO>> getAllSallesApi()
+    {
+        List<ListAttributAUTO> list = sallesServices.gettAllSallesApi();
+        return new ResponseEntity<>(list , HttpStatus.OK);
+    }
+
 
 	@GetMapping("/ava")
     public ResponseEntity<List<SallesDTO>> getAllSallesAvailab(@RequestParam("date") String dateStr)
@@ -85,14 +93,6 @@ public class SallesController {
 		} catch (ParseException e) {
 			return ResponseEntity.badRequest().body(Collections.emptyList());
 		}
-    }
-
-
-	@GetMapping("/listSalles")
-    public ResponseEntity<List<ListAttributAUTO>> getAllSallesApi()
-    {
-        List<ListAttributAUTO> list = sallesServices.gettAllSallesApi();
-        return new ResponseEntity<>(list , HttpStatus.OK);
     }
 
 

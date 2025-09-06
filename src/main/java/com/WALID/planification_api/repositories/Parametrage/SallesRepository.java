@@ -19,6 +19,12 @@ public interface SallesRepository extends JpaRepository<Salles,Long>{
 			+ " where s.statut in ('actif', 'inActif') "
             + " order by s.dateCreation ")
 	List<Salles> findAllWithStatus();
+	
+	@Query("select s"
+			+ " from Salles s "
+			+ " where s.statut in ('actif') "
+            + " order by s.dateCreation ")
+	List<Salles> getSallesListApi();
 
 
     Optional<Salles> findByIdAndStatut(Long id , String statut);

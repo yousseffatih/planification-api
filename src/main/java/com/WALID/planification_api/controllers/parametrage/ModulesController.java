@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.playload.MessageResponse;
+import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.ModulesDTO;
 import com.WALID.planification_api.repositories.Parametrage.ModulesRepository;
 import com.WALID.planification_api.services.Modules.InModulesServices;
@@ -37,6 +38,13 @@ public class ModulesController {
     public ResponseEntity<List<ModulesDTO>> getAllModules()
     {
         List<ModulesDTO> modulesDTOs = modulesServices.getAllModules();
+        return new ResponseEntity<>(modulesDTOs , HttpStatus.OK);
+    }
+	
+	@GetMapping("/listModules")
+    public ResponseEntity<List<ListAttributAUTO>> getListModules()
+    {
+        List<ListAttributAUTO> modulesDTOs = modulesServices.getModulesListApi();
         return new ResponseEntity<>(modulesDTOs , HttpStatus.OK);
     }
 

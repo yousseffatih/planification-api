@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.entities.Modules;
+import com.WALID.planification_api.entities.Salles;
 import com.WALID.planification_api.playload.ResourceNotFoundException;
+import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.ModulesDTO;
 import com.WALID.planification_api.repositories.Parametrage.ModulesRepository;
 
@@ -25,6 +27,12 @@ public class ModulesServicesImp implements InModulesServices{
 	public List<ModulesDTO> getAllModules() {
 		List<Modules> modules = modulesRepository.findAllWithStatus();
         return  modules.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<ListAttributAUTO> getModulesListApi() {
+		List<Modules> modules = modulesRepository.findAllWithStatusListApi();
+        return  modules.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -58,7 +66,7 @@ public class ModulesServicesImp implements InModulesServices{
 		Modules module = modulesRepository.findByIdStatut(id).orElseThrow(()-> new ResourceNotFoundException("Module", "id", id));
 
 		module.setNom(modulesDTO.getNom());
-    	//classe.setStatut(classesDTO.getStatut());
+    	module.setStatut(modulesDTO.getStatut());
 		module.setDateModification(new Date());
 
     	Modules mdl = modulesRepository.save(module);
@@ -75,6 +83,15 @@ public class ModulesServicesImp implements InModulesServices{
         dto.setDateCreation(x.getDateCreation());
         dto.setDateDesactivation(x.getDateDesactivation());
         dto.setDateModification(x.getDateModification());
+        return dto;
+    }
+	
+	private ListAttributAUTO mapToList(Modules x)
+    {
+		ListAttributAUTO dto = new ListAttributAUTO();
+        dto.setId(x.getId());
+        dto.setLibelle(x.getNom());
+
         return dto;
     }
 }

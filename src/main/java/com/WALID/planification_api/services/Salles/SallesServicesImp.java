@@ -30,7 +30,7 @@ public class SallesServicesImp implements InSallesServices{
 
 	@Override
 	public List<SallesDTO> getAllSalles() {
-		List<Salles> salles = sallesRepository.findAllWithStatus();
+		List<Salles> salles = sallesRepository.getSallesListApi();
         return  salles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
@@ -68,6 +68,7 @@ public class SallesServicesImp implements InSallesServices{
 		salles.setDateCreation(new Date());
 		salles.setStatut(sallesDTO.getStatut());
 		salles.setNom(sallesDTO.getNom());
+		salles.setStatut(GlobalConstant.STATUT_ACTIF);
 		salles.setMaxEffective(sallesDTO.getMaxEffective());
 		salles.setTypeSalle(typeSalle);
 		Salles rl = sallesRepository.save(salles);
