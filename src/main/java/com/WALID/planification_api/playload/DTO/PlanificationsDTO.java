@@ -62,7 +62,7 @@ public class PlanificationsDTO {
 		@NotNull(message = "Salle est obligatoire !")
 		private Long idSalle;
 		private String libelleSalle;
-
+		
 		@NotNull(message = "Utilisateur est obligatoire !")
 		private Long idUser;
 		private String libelleUser;

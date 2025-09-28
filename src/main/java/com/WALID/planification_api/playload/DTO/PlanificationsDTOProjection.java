@@ -45,4 +45,6 @@ public interface PlanificationsDTOProjection {
     String getLiblleTypePlanification();
     
     Long getIdTypePlanification();
+    
+    String getLibelleClasses();
 }

@@ -11,6 +11,8 @@ import com.WALID.planification_api.entities.ListAttribut;
 public interface ListAttributRepository extends JpaRepository<ListAttribut,Long> {
 
 	boolean existsByLibelleAndStatut(String libelle , String statut);
+	
+	List<ListAttribut> findAllByStatut(String statut);
 
 	List<ListAttribut> findAllByListNameApiAndStatut(String nameApi, String statut);
 
