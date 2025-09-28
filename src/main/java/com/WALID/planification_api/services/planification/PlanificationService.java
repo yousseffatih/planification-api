@@ -62,128 +62,151 @@ public class PlanificationService implements InPlanificationService{
 	private ListAttributRepository listAttributRepository; 
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public Planifications addPlanification(PlanificationsDTO planificationsDTO) throws Exception {
+	    
+	    List<Planifications> planifications = planificationRepository
+	        .findByDateRangeOrderByDateAndTime(planificationsDTO.getTimeDebut(), planificationsDTO.getTimeFin());
+	    
+	    if (!planifications.isEmpty()) {
+	        throw new Exception("Planification déjà existante à ce moment");
+	    }
 
-		Planifications planification = new Planifications();
+	    Salles salles = sallesRepository.findByIdAndStatut(planificationsDTO.getIdSalle(), GlobalConstant.STATUT_ACTIF)
+	        .orElseThrow(() -> new ResourceNotFoundException("Salle", "id", planificationsDTO.getIdSalle()));
 
-		Salles salles = sallesRepository.findByIdAndStatut(planificationsDTO.getIdSalle(),GlobalConstant.STATUT_ACTIF)
-				 .orElseThrow(() -> new ResourceNotFoundException("Salle","id",planificationsDTO.getIdSalle()));
+	    Modules modules = modulesRepository.findByIdStatut(planificationsDTO.getIdModule())
+	        .orElseThrow(() -> new ResourceNotFoundException("Module", "id", planificationsDTO.getIdModule()));
 
-		Modules modules = modulesRepository.findByIdStatut(planificationsDTO.getIdModule())
-				.orElseThrow(() -> new ResourceNotFoundException("Module","id",planificationsDTO.getIdModule()));
+	    Users users = userRepository.findByIdAndStatutList(planificationsDTO.getIdUser())
+	        .orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", planificationsDTO.getIdUser()));
 
-		Users users = 	userRepository.findByIdAndStatutList(planificationsDTO.getIdUser())
-				.orElseThrow(() -> new ResourceNotFoundException("Utilisateur","id",planificationsDTO.getIdUser()));
-				
-		Professeur prof = professeurRepository.findByIdStatut(planificationsDTO.getIdProfesseur())
-				.orElseThrow(() -> new ResourceNotFoundException("Professeur","id",planificationsDTO.getIdProfesseur()));
-		
-		ListAttribut typePlanification = listAttributRepository.findByIdAndStatut(planificationsDTO.getIdTypePlanification() , GlobalConstant.STATUT_ACTIF)
-				.orElseThrow(() -> new ResourceNotFoundException("Type Plaification","id",planificationsDTO.getIdTypePlanification()));
-		
-		
-				
-		List<Classes> classes = new ArrayList<>();
-		int totaleElement = 0;
+	    Professeur prof = professeurRepository.findByIdStatut(planificationsDTO.getIdProfesseur())
+	        .orElseThrow(() -> new ResourceNotFoundException("Professeur", "id", planificationsDTO.getIdProfesseur()));
 
-		planification.setDateCreation(new Date());
-		planification.setStatut(GlobalConstant.STATUT_ACTIF);
-		planification.setNom(planificationsDTO.getNom());
+	    ListAttribut typePlanification = listAttributRepository.findByIdAndStatut(
+	        planificationsDTO.getIdTypePlanification(), GlobalConstant.STATUT_ACTIF)
+	        .orElseThrow(() -> new ResourceNotFoundException("Type Plaification", "id", planificationsDTO.getIdTypePlanification()));
 
-		planification.setDatePlanification(planificationsDTO.getDatePlanification());
-		planification.setModule(modules);
-		planification.setTimeDebut(planificationsDTO.getTimeDebut());
-		planification.setTimeFin(planificationsDTO.getTimeFin());
-		planification.setUser(users);
-		planification.setSalle(salles);
-		
-		planification.setProfesseur(prof);
-		planification.setTypePlanification(typePlanification);
-		
-		
-		planification = planificationRepository.save(planification);
+	    // 👉 First calculate total effectif
+	    int totaleElement = 0;
+	    List<Classes> classes = new ArrayList<>();
+	    for (Long id : planificationsDTO.getIdsClasses()) {
+	        Classes cls = classesRepository.findByIdStatut(id)
+	            .orElseThrow(() -> new ResourceNotFoundException("Classe", "id", id));
+	        totaleElement += cls.getNomberEff();
+	        classes.add(cls);
+	    }
 
-		for(Long id : planificationsDTO.getIdsClasses())
-		{
-			PlanificationClasse planificationClasse = new PlanificationClasse();
-			Classes cls = classesRepository.findByIdStatut(id).orElseThrow(() -> new ResourceNotFoundException("Classe","id",id));
-			planificationClasse.setClasses(cls);
-			planificationClasse.setPlanifications(planification);
-			planificationClasse.setDateCreation(new Date());
-			planificationClasse.setStatut(GlobalConstant.STATUT_ACTIF);
+	    // 👉 Check salle capacity BEFORE saving
+	    if (salles.getMaxEffective() < totaleElement) {
+	        throw new Exception("Le nombre total de classes est supérieur au nombre de salles effectives.");
+	    }
 
-			planificationClasseRepository.save(planificationClasse);
+	    // Now create and save the planification
+	    Planifications planification = new Planifications();
+	    planification.setDateCreation(new Date());
+	    planification.setStatut(GlobalConstant.STATUT_ACTIF);
+	    planification.setNom(planificationsDTO.getNom());
+	    planification.setDatePlanification(planificationsDTO.getDatePlanification());
+	    planification.setModule(modules);
+	    planification.setTimeDebut(planificationsDTO.getTimeDebut());
+	    planification.setTimeFin(planificationsDTO.getTimeFin());
+	    planification.setUser(users);
+	    planification.setSalle(salles);
+	    planification.setProfesseur(prof);
+	    planification.setTypePlanification(typePlanification);
 
-			totaleElement += cls.getNomberEff();
-		    classes.add(cls);
-		}
-		if(salles.getMaxEffective()	< totaleElement)
-		{
-			throw new Exception("Le nombre total de classes est supérieur au nombre de salles effectives.");
-		}
-		return planification;
+	    planification = planificationRepository.save(planification);
+
+	    // Save planification classes
+	    for (Classes cls : classes) {
+	        PlanificationClasse planificationClasse = new PlanificationClasse();
+	        planificationClasse.setClasses(cls);
+	        planificationClasse.setPlanifications(planification);
+	        planificationClasse.setDateCreation(new Date());
+	        planificationClasse.setStatut(GlobalConstant.STATUT_ACTIF);
+
+	        planificationClasseRepository.save(planificationClasse);
+	    }
+
+	    return planification;
 	}
+
 
 	@Override
-	@Transactional
-	public void updatePlanification(PlanificationsDTO planificationsDT , Long id) throws Exception {
-		Planifications planification = planificationRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Planification", "id", id));
-		Users users = userRepository.findByIdAndStatutList(planificationsDT.getIdUser()).orElseThrow(()-> new ResourceNotFoundException("Utilisateur", "id", planificationsDT.getId()));
-		Modules module = modulesRepository.findByIdStatut(planificationsDT.getIdModule()).orElseThrow(()-> new ResourceNotFoundException("Module", "id", planificationsDT.getId()));
-		Salles salle = sallesRepository.findById(planificationsDT.getIdSalle()).orElseThrow(()-> new ResourceNotFoundException("Salle", "id", planificationsDT.getId()));
-		
-		ListAttribut typePlanification = listAttributRepository.findByIdAndStatut(planificationsDT.getIdTypePlanification() , GlobalConstant.STATUT_ACTIF)
-				.orElseThrow(() -> new ResourceNotFoundException("Type Plaification","id",planificationsDT.getIdTypePlanification()));
-		
-		
-		Professeur prof = professeurRepository.findByIdStatut(planificationsDT.getIdProfesseur())
-				.orElseThrow(() -> new ResourceNotFoundException("Professeur","id",planificationsDT.getIdProfesseur()));
-		
-		List<PlanificationClasse> pl_cls = planificationClasseRepository.findByPlanificationsId(id);
-		
+	@Transactional(rollbackFor = Exception.class)
+	public void updatePlanification(PlanificationsDTO planificationsDTO, Long id) throws Exception{
 
-		List<Classes> classes = new ArrayList<>();
-		int totaleElement = 0;
+	    // 1️⃣ Load existing planification
+	    Planifications planification = planificationRepository.findById(id)
+	            .orElseThrow(() -> new ResourceNotFoundException("Planification", "id", id));
 
-		planification.setDateCreation(new Date());
-		planification.setStatut(GlobalConstant.STATUT_ACTIF);
-		planification.setNom(planificationsDT.getNom());
+	    // 2️⃣ Load required entities
+	    Users users = userRepository.findByIdAndStatutList(planificationsDTO.getIdUser())
+	            .orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", planificationsDTO.getIdUser()));
 
-		planification.setDatePlanification(planificationsDT.getDatePlanification());
-		planification.setModule(module);
-		planification.setTimeDebut(planificationsDT.getTimeDebut());
-		planification.setTimeFin(planificationsDT.getTimeFin());
-		planification.setUser(users);
-		planification.setSalle(salle);
-		planification.setProfesseur(prof);
-		planification.setTypePlanification(typePlanification);
+	    Modules module = modulesRepository.findByIdStatut(planificationsDTO.getIdModule())
+	            .orElseThrow(() -> new ResourceNotFoundException("Module", "id", planificationsDTO.getIdModule()));
 
-		planification = planificationRepository.save(planification);
+	    Salles salle = sallesRepository.findById(planificationsDTO.getIdSalle())
+	            .orElseThrow(() -> new ResourceNotFoundException("Salle", "id", planificationsDTO.getIdSalle()));
 
-		for(PlanificationClasse plc : pl_cls)
-		{
-			plc.setStatut(GlobalConstant.STATUT_DELETE);
-			planificationClasseRepository.save(plc);
-		}
+	    ListAttribut typePlanification = listAttributRepository.findByIdAndStatut(
+	            planificationsDTO.getIdTypePlanification(), GlobalConstant.STATUT_ACTIF)
+	            .orElseThrow(() -> new ResourceNotFoundException("Type Planification", "id", planificationsDTO.getIdTypePlanification()));
 
-		for(Long idc : planificationsDT.getIdsClasses())
-		{
-			PlanificationClasse planificationClasse = new PlanificationClasse();
-			Classes cls = classesRepository.findByIdStatut(idc).orElseThrow(() -> new ResourceNotFoundException("Classe","id",idc));
-			planificationClasse.setClasses(cls);
-			planificationClasse.setPlanifications(planification);
+	    Professeur prof = professeurRepository.findByIdStatut(planificationsDTO.getIdProfesseur())
+	            .orElseThrow(() -> new ResourceNotFoundException("Professeur", "id", planificationsDTO.getIdProfesseur()));
 
-			planificationClasseRepository.save(planificationClasse);
+	    // 3️⃣ Validate salle capacity BEFORE saving anything
+	    int totalEffectif = 0;
+	    List<Classes> classes = new ArrayList<>();
+	    for (Long idc : planificationsDTO.getIdsClasses()) {
+	        Classes cls = classesRepository.findByIdStatut(idc)
+	                .orElseThrow(() -> new ResourceNotFoundException("Classe", "id", idc));
+	        totalEffectif += cls.getNomberEff();
+	        classes.add(cls);
+	    }
 
-			totaleElement += cls.getNomberEff();
-		    classes.add(cls);
-		}
-		if(salle.getMaxEffective()	< totaleElement)
-		{
-			throw new Exception("Le nombre total de classes est supérieur au nombre de salles effectives.");
-		}
+	    if (salle.getMaxEffective() < totalEffectif) {
+	        throw new Exception(
+	                "Le nombre total de classes est supérieur à la capacité de la salle.");
+	    }
+
+	    // 4️⃣ Update planification fields
+	    planification.setNom(planificationsDTO.getNom());
+	    planification.setDatePlanification(planificationsDTO.getDatePlanification());
+	    planification.setModule(module);
+	    planification.setTimeDebut(planificationsDTO.getTimeDebut());
+	    planification.setTimeFin(planificationsDTO.getTimeFin());
+	    planification.setUser(users);
+	    planification.setSalle(salle);
+	    planification.setProfesseur(prof);
+	    planification.setTypePlanification(typePlanification);
+	    planification.setDateModification(new Date()); // ✅ use dateModification instead of overwriting dateCreation
+	    planification.setStatut(GlobalConstant.STATUT_ACTIF);
+
+	    planificationRepository.save(planification);
+
+	    // 5️⃣ Mark old associations as deleted
+	    List<PlanificationClasse> existingClasses = planificationClasseRepository.findByPlanificationsId(id);
+	    for (PlanificationClasse plc : existingClasses) {
+	        plc.setStatut(GlobalConstant.STATUT_DELETE);
+	        planificationClasseRepository.save(plc);
+	    }
+
+	    // 6️⃣ Add new associations
+	    for (Classes cls : classes) {
+	        PlanificationClasse newPlc = new PlanificationClasse();
+	        newPlc.setClasses(cls);
+	        newPlc.setPlanifications(planification);
+	        newPlc.setDateCreation(new Date());
+	        newPlc.setStatut(GlobalConstant.STATUT_ACTIF);
+	        planificationClasseRepository.save(newPlc);
+	    }
 	}
+
 
 	@Override
 	public List<PlanificationsDTO> listplanification(String dateDebut , String dateFin) {
@@ -194,19 +217,23 @@ public class PlanificationService implements InPlanificationService{
 	@Override
 	public PlanificationsDTO getPlanification(Long id) {
 
-		Planifications planifications = planificationRepository.findByIdAndStatut(id,GlobalConstant.STATUT_ACTIF).orElseThrow(()-> new ResourceNotFoundException("Planification", "id", id));
+		Planifications planifications = planificationRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Planification", "id", id));
 		Users users = userRepository.findById(planifications.getUser().getId()).orElseThrow(()-> new ResourceNotFoundException("Utilisateur", "id", planifications.getUser().getId()));
 		Modules module = modulesRepository.findById(planifications.getModule().getId()).orElseThrow(()-> new ResourceNotFoundException("Module", "id", planifications.getModule().getId()));
 		Salles salle = sallesRepository.findById(planifications.getSalle().getId()).orElseThrow(()-> new ResourceNotFoundException("Salle", "id", planifications.getSalle().getId()));
-
+		ListAttribut listAttribut = listAttributRepository.findById(planifications.getTypePlanification().getId()).orElseThrow(()-> new ResourceNotFoundException("Type de salle", "id", planifications.getTypePlanification().getId()));
+		Professeur professeur = professeurRepository.findById(planifications.getProfesseur().getId()).orElseThrow(() -> new ResourceNotFoundException("Professeur", "id", planifications.getProfesseur().getId()));
+				
+				
 	    PlanificationsDTO planificationsDTO = new PlanificationsDTO();
 	    planificationsDTO.setId(planifications.getId());
-	    planificationsDTO.setDateCreation(planificationsDTO.getDateCreation());
+	    planificationsDTO.setDateCreation(planifications.getDateCreation());
 	    planificationsDTO.setDateModification(planifications.getDateModification());
 	    planificationsDTO.setDatePlanification(planifications.getDatePlanification());
 	    planificationsDTO.setDateDesactivation(planifications.getDateDesactivation());
 	    planificationsDTO.setStatut(planifications.getStatut());
 	    planificationsDTO.setNom(planifications.getNom());
+	    planificationsDTO.setDescription(planifications.getDescription());
 
 	    planificationsDTO.setProf(planifications.getProf());
 	    planificationsDTO.setTimeDebut(planifications.getTimeDebut());
@@ -217,9 +244,17 @@ public class PlanificationService implements InPlanificationService{
 
 	    planificationsDTO.setIdSalle(salle.getId());
 	    planificationsDTO.setLibelleSalle(salle.getNom());
+	    
+	    planificationsDTO.setIdTypePlanification(listAttribut.getId());
+	    planificationsDTO.setLibelleTypePlanification(listAttribut.getLibelle());
+	    
+	    planificationsDTO.setIdProfesseur(professeur.getId());
+	    planificationsDTO.setLibelleProfeseur(professeur.getNom()+" "+professeur.getPrenom());
 
 	    planificationsDTO.setIdUser(users.getId());
 	    planificationsDTO.setLibelleUser(users.getNom()+" "+users.getPrenom());
+	    
+	    
 	    planificationsDTO.setStatut(planifications.getStatut());
 
 	    List<PlanificationClasse> planificationClasses = planificationClasseRepository.findByPlanificationsIdAndStatut(id , GlobalConstant.STATUT_ACTIF);

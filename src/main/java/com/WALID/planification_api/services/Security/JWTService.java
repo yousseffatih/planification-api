@@ -17,6 +17,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 
 @Service
 public class JWTService{
@@ -60,6 +61,38 @@ public class JWTService{
                 .signWith(getSignKey())
                 .compact();
 	}
+	
+	public Long extractUserId(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            
+            // Try different claim names that might contain the user ID
+            Object userIdClaim = claims.get("userId");
+            if (userIdClaim == null) {
+                userIdClaim = claims.get("id");
+            }
+            if (userIdClaim == null) {
+                userIdClaim = claims.get("sub"); // subject claim
+            }
+            
+            if (userIdClaim == null) {
+                throw new RuntimeException("User ID not found in token claims");
+            }
+            
+            // Convert to Long
+            if (userIdClaim instanceof Number) {
+                return ((Number) userIdClaim).longValue();
+            } else if (userIdClaim instanceof String) {
+                return Long.parseLong((String) userIdClaim);
+            } else {
+                throw new RuntimeException("Invalid user ID format in token");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error extracting user ID from token: " + e.getMessage());
+            throw new RuntimeException("Failed to extract user ID from token", e);
+        }
+    }
 
 	private SecretKey getSignKey() {
 		byte[] keyBytes = Decoders.BASE64.decode(secretkey);

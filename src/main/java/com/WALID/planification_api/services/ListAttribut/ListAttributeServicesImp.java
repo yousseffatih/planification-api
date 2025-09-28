@@ -19,6 +19,14 @@ public class ListAttributeServicesImp implements InListAttributeServices{
 
 	@Autowired
 	private ListAttributRepository listAttributRepository;
+	
+	
+	@Override
+	public List<ListAttributDTO> getList() {
+		List<ListAttribut> list = listAttributRepository.findAllByStatut(GlobalConstant.STATUT_ACTIF);
+		List<ListAttributDTO> listAttributDTOs = list.stream().map((l) -> mapToDto(l)).collect(Collectors.toList());
+		return listAttributDTOs;
+	}
 
 	@Override
 	public ListAttributDTO addListAttribute(ListAttributDTO listAttributDTO) {
@@ -31,6 +39,19 @@ public class ListAttributeServicesImp implements InListAttributeServices{
 		listAttribut.setListNameApi(listAttributDTO.getListNameApi());
 		return mapToDto(listAttributRepository.save(listAttribut));
 	}
+	
+	@Override
+	public ListAttributDTO updateListAttribute(Long id, ListAttributDTO listAttributDTO) {
+		ListAttribut listAttribut = listAttributRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Attribute", "id", id));
+		
+		listAttribut.setDateModification(new Date());
+		listAttribut.setLibelle(listAttribut.getStatut());
+		listAttribut.setValue(listAttributDTO.getValue());
+		listAttribut.setListNameApi(listAttributDTO.getListNameApi());
+		return mapToDto(listAttributRepository.save(listAttribut));
+	}
+	
+	
 	
 	@Override
 	public void deleteAttributDTO(Long id) {
@@ -68,5 +89,4 @@ public class ListAttributeServicesImp implements InListAttributeServices{
 		dto.setValue(x.getValue());
         return dto;
     }
-
 }

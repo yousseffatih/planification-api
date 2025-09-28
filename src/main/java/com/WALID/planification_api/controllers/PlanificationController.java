@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,8 @@ import com.WALID.planification_api.playload.DTO.GetProfesseurBody;
 import com.WALID.planification_api.playload.DTO.PageableResponseDTO;
 import com.WALID.planification_api.playload.DTO.PlanificationInfo;
 import com.WALID.planification_api.playload.DTO.PlanificationsDTO;
+import com.WALID.planification_api.repositories.planification.PlanificationRepository;
+import com.WALID.planification_api.services.Security.JWTService;
 import com.WALID.planification_api.services.planification.InPlanificationService;
 
 import jakarta.validation.Valid;
@@ -35,14 +38,28 @@ public class PlanificationController {
 
 	@Autowired
 	private InPlanificationService planificationsServices;
+	
+	@Autowired
+	private PlanificationRepository planificationRepository;
+	
+	@Autowired
+	private JWTService jwtService;
 
 	@PostMapping("")
 	public ResponseEntity<?> addPlanification(@Valid @RequestBody PlanificationsDTO planificationsDTO)
-	{
+	{   
 		LocalDate today = LocalDate.now();
 		LocalDate dateplanification = planificationsDTO.getDatePlanification().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 		boolean ifDateStartAfterEnd = planificationsDTO.getTimeDebut().isAfter(planificationsDTO.getTimeFin());
+		
+		boolean isPlanExite = planificationRepository.existsBySalleAndTimeOverlap(planificationsDTO.getIdSalle(),planificationsDTO.getTimeDebut(),planificationsDTO.getTimeFin());
+		
+		if(isPlanExite)
+		{
+			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new MessageResponse("Il existe déjà une planification dans cette salle pour l'intervalle de temps choisi !", "warning") );
+		}
+		
 		if(ifDateStartAfterEnd)
 		{
 			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new MessageResponse("L'heure de début ne peut pas être supérieure à l'heure de fin !", "warning") );
@@ -98,6 +115,13 @@ public class PlanificationController {
 	{
 		LocalDate today = LocalDate.now();
 		LocalDate dateplanification = planificationsDTO.getDatePlanification().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		
+		boolean isPlanExite = planificationRepository.existsBySalleAndTimeOverlapExcludingId(planificationsDTO.getIdSalle(),planificationsDTO.getTimeDebut(),planificationsDTO.getTimeFin(), id);
+		
+		if(isPlanExite)
+		{
+			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new MessageResponse("Il existe déjà une planification dans cette salle pour l'intervalle de temps choisi !", "warning") );
+		}
 
 		boolean ifDateStartAfterEnd = planificationsDTO.getTimeDebut().isAfter(planificationsDTO.getTimeFin());
 		if(ifDateStartAfterEnd)
