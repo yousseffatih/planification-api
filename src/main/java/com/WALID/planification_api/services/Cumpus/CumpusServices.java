@@ -54,6 +54,7 @@ public class CumpusServices implements InCumpusService{
 		cumpus.setStatut(GlobalConstant.STATUT_ACTIF);
 		cumpus.setNom(cumpusDTO.getNom());
 		cumpus.setVille(ville);
+		cumpusRepository.save(cumpus);
         return mapToDTO(cumpus);
 	}
 
@@ -72,9 +73,10 @@ public class CumpusServices implements InCumpusService{
 		Villes ville = villesRepository.findByIdStatut(cumpusDTO.getIdVille()).orElseThrow(() -> new ResourceNotFoundException("Ville","id",cumpusDTO.getIdVille()));
 
 		cumpus.setDateCreation(new Date());
-		cumpus.setStatut(GlobalConstant.STATUT_DELETE);
+		cumpus.setStatut(GlobalConstant.STATUT_ACTIF);
 		cumpus.setNom(cumpusDTO.getNom());
 		cumpus.setVille(ville);
+		cumpusRepository.save(cumpus);
         return mapToDTO(cumpus);
 	}
 	

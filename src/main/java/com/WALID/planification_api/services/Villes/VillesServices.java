@@ -47,6 +47,7 @@ public class VillesServices implements InVillesServices{
 		ville.setStatut(GlobalConstant.STATUT_ACTIF);
 		ville.setNom(villesDTO.getNom());
 		ville.setLibelle(GlobalConstant.formatName(villesDTO.getNom()));
+		villeRepository.save(ville);
         return mapToDTO(ville);
 	}
 
@@ -66,7 +67,8 @@ public class VillesServices implements InVillesServices{
 		ville.setMotif(villesDTO.getMotif());
 		ville.setNom(villesDTO.getNom());
 		ville.setLibelle(GlobalConstant.formatName(villesDTO.getNom()));
-		return null;
+		villeRepository.save(ville);
+		return mapToDTO(ville);
 	}
 	
 	
