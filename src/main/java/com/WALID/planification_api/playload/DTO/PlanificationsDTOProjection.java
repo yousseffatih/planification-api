@@ -1,6 +1,5 @@
 package com.WALID.planification_api.playload.DTO;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -45,6 +44,14 @@ public interface PlanificationsDTOProjection {
     String getLiblleTypePlanification();
     
     Long getIdTypePlanification();
+    
+    Long getIdCumpus();
+    
+    String getLibelleCumpus();
+    
+    Long getIdVille();
+    
+    String getLibelleVille();
     
     String getLibelleClasses();
 }

@@ -50,7 +50,7 @@ public class AuthentificationServices {
 			return null;
 		}
 
-		String jwt = jwtService.generateToken(user.getUsername());
+		String jwt = jwtService.generateToken(user.getUsername(), user.getId());
 		String refreshJwt = jwtService.generateRefreshToken(new HashMap<>(),user.getUsername());
 
 		JwtAuthentication jwtAythentication =new JwtAuthentication();
@@ -104,7 +104,7 @@ public class AuthentificationServices {
 
 		if(jwtService.validateToken(token,userPrincipal))
 		{
-			String jwt = jwtService.generateToken(userPrincipal.getUsername());
+			String jwt = jwtService.generateToken(userPrincipal.getUsername(), userPrincipal.getUser().getId());
 
 			JwtAuthentication jwtAythentication =new JwtAuthentication();
 

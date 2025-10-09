@@ -97,6 +97,10 @@ public interface PlanificationRepository extends JpaRepository<Planifications,Lo
 		        p.description AS description,
 		        tp.libelle AS liblleTypePlanification,
 		        tp.id AS idTypePlanification,
+		        cu.id AS idCumpus,
+		        cu.nom AS libelleCumpus,
+		        v.id AS idVille,
+		        v.nom AS libelleVille,
 		        GROUP_CONCAT(c.id ORDER BY c.id SEPARATOR ', ') AS libelleClasses
 		    FROM planifications p
 		    LEFT JOIN professeur pr ON p.professeur_id = pr.id
@@ -106,10 +110,14 @@ public interface PlanificationRepository extends JpaRepository<Planifications,Lo
 		    LEFT JOIN list_attribut tp ON p.type_planification_id = tp.id
 		    LEFT JOIN planification_classe pc ON p.id = pc.planification_id
 		    LEFT JOIN classes c ON pc.classes_id = c.id
+		    LEFT JOIN cumpus cu ON p.cumpus_id = cu.id
+		    LEFT JOIN villes v ON cu.ville_id = v.id
 		    WHERE (:salle IS NULL OR s.id = :salle)
 		    AND (:module IS NULL OR m.id = :module)
 		    AND (:typePlanification IS NULL OR tp.id = :typePlanification)
 		    AND (:professeur IS NULL OR pr.id = :professeur)
+		    AND (:cumpus IS NULL OR cu.id = :cumpus)
+		    AND (:ville  IS NULL OR v.id = :ville)
 		    AND (:dateDebut IS NULL OR p.date_planification >= STR_TO_DATE(:dateDebut, '%d/%m/%Y'))
 		    AND (:dateFin IS NULL OR p.date_planification <= STR_TO_DATE(:dateFin, '%d/%m/%Y'))
 		    GROUP BY p.id, p.nom, p.date_planification, p.time_debut, p.time_fin, 
@@ -127,10 +135,14 @@ public interface PlanificationRepository extends JpaRepository<Planifications,Lo
 		    LEFT JOIN list_attribut tp ON p.type_planification_id = tp.id
 		    LEFT JOIN planification_classe pc ON p.id = pc.planification_id
 		    LEFT JOIN classes c ON pc.classes_id = c.id
+		    LEFT JOIN cumpus cu ON p.cumpus_id = cu.id
+		    LEFT JOIN villes v ON cu.ville_id = v.id
 		    WHERE (:salle IS NULL OR s.id = :salle)
 		    AND (:module IS NULL OR m.id = :module)
 		    AND (:typePlanification IS NULL OR tp.id = :typePlanification)
 		    AND (:professeur IS NULL OR pr.id = :professeur)
+		    AND (:cumpus IS NULL OR cu.id = :cumpus)
+		    AND (:ville  IS NULL OR v.id = :ville)
 		    AND (:dateDebut IS NULL OR p.date_planification >= STR_TO_DATE(:dateDebut, '%d/%m/%Y'))
 		    AND (:dateFin IS NULL OR p.date_planification <= STR_TO_DATE(:dateFin, '%d/%m/%Y'))
 		    """,
@@ -143,6 +155,8 @@ public interface PlanificationRepository extends JpaRepository<Planifications,Lo
 		    @Param("dateDebut") String du,
 		    @Param("dateFin") String au,
 		    @Param("professeur") Long idProf,
+		    @Param("cumpus") Long idCumpus,
+		    @Param("ville") Long idVille,
 		    Pageable pageable
 		);
 	

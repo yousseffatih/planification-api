@@ -1,7 +1,9 @@
 package com.WALID.planification_api.services.Cumpus;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,24 @@ public class CumpusServices implements InCumpusService{
 	@Override
 	public List<CumpusDTO> getAllCumpus() {
 		
-		List<Cumpus> cumpus = cumpusRepository.findAllWithStatus();
+		List<Cumpus> cumpus = new ArrayList<>(cumpusRepository.findAllWithStatus());
+		
+		Cumpus addCumpus = new Cumpus();
+		addCumpus.setId(0L);
+		addCumpus.setNom("TOUS LES CUMPUS");
+		
+		cumpus.add(addCumpus);
+		
         return  cumpus.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<ListAttributAUTO> getCumpusListApi() {
-		List<Cumpus> cumpus = cumpusRepository.getClassesListApi();
+		List<Cumpus> cumpus = new ArrayList<>(cumpusRepository.getClassesListApi());
+		
+		Cumpus addCumpus = new Cumpus();
+		addCumpus.setId(0L);
+		addCumpus.setNom("TOUS LES CUMPUS");
         return  cumpus.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
 	}
 
@@ -73,7 +86,7 @@ public class CumpusServices implements InCumpusService{
 		Villes ville = villesRepository.findByIdStatut(cumpusDTO.getIdVille()).orElseThrow(() -> new ResourceNotFoundException("Ville","id",cumpusDTO.getIdVille()));
 
 		cumpus.setDateCreation(new Date());
-		cumpus.setStatut(GlobalConstant.STATUT_ACTIF);
+		cumpus.setStatut(cumpusDTO.getStatut());
 		cumpus.setNom(cumpusDTO.getNom());
 		cumpus.setVille(ville);
 		cumpusRepository.save(cumpus);
@@ -85,8 +98,11 @@ public class CumpusServices implements InCumpusService{
 		CumpusDTO dto = new CumpusDTO();
         dto.setId(x.getId());
         dto.setNom(x.getNom());
-        dto.setIdVille(x.getVille().getId());
-        dto.setLibelleVille(x.getVille().getNom());
+        Optional.ofNullable(x.getVille())
+        .ifPresent(ville -> {
+            dto.setIdVille(ville.getId());
+            dto.setLibelleVille(ville.getNom());
+        });
         dto.setStatut(x.getStatut());
         dto.setDateCreation(x.getDateCreation());
         dto.setDateDesactivation(x.getDateDesactivation());

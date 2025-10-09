@@ -3,6 +3,7 @@ package com.WALID.planification_api.controllers;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,6 +45,7 @@ public class PlanificationController {
 	
 	@Autowired
 	private JWTService jwtService;
+	
 
 	@PostMapping("")
 	public ResponseEntity<?> addPlanification(@Valid @RequestBody PlanificationsDTO planificationsDTO)
@@ -92,14 +94,20 @@ public class PlanificationController {
 					@RequestParam(value = "pageSize" , defaultValue = "5" , required = false) int pageSize)
 			
 	{
-		PageableResponseDTO list = planificationsServices.findFilteredPlanification(getProfesseurBody.getIdSalle() ,getProfesseurBody.getIdModule(),getProfesseurBody.getIdType(),getProfesseurBody.getDateDebut(),getProfesseurBody.getDateFin() , getProfesseurBody.getIdProf() , pageNo, pageSize);
+		PageableResponseDTO list = planificationsServices.findFilteredPlanification(getProfesseurBody.getIdSalle() ,getProfesseurBody.getIdModule(),getProfesseurBody.getIdType(),getProfesseurBody.getDateDebut(),getProfesseurBody.getDateFin() , getProfesseurBody.getIdProf() ,getProfesseurBody.getIdCumpus(),getProfesseurBody.getIdVille(), pageNo, pageSize);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PlanificationsDTO> getPlanification(@PathVariable Long id)
+	public ResponseEntity<PlanificationsDTO> getPlanification(@PathVariable Long id, @RequestHeader("Authorization") String token)
 	{
+		//System.out.println("this is the token,"+ token);
+		//Map<String, Object> userInfo = jwtService.extractUserInfo(token);
+		//Long userId = (Long) Long.parseLong(userInfo.get("userId").toString());
+		//System.out.println("this is the ID,"+ userId);
+		
 		PlanificationsDTO list = planificationsServices.getPlanification(id);
+		
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 

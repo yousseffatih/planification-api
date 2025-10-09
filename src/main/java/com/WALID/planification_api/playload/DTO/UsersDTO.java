@@ -52,6 +52,10 @@ public class UsersDTO {
     
     @NotNull(message = "Role est obligatoire!")
     private Long idRole;
+    private String libelleRole;
     
-    private String libelleRole; 
+    private Long idCumpus;
+    private String libelleCumpus;
+    
+    
 }
