@@ -68,7 +68,7 @@ public class VillesServices implements InVillesServices{
 		ville.setNom(villesDTO.getNom());
 		ville.setLibelle(GlobalConstant.formatName(villesDTO.getNom()));
 		villeRepository.save(ville);
-		return null;
+		return mapToDTO(ville);
 	}
 	
 	
