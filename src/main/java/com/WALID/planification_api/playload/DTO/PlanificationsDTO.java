@@ -50,7 +50,6 @@ public class PlanificationsDTO {
 
 		private String prof;
 	    
-	    
 	    @NotNull(message = "Prof est obligatoire !")
 		private Long idProfesseur;
 	    private String libelleProfeseur;
@@ -70,8 +69,12 @@ public class PlanificationsDTO {
 		@NotNull(message = "Type Planification est obligatoire !")
 		private Long idTypePlanification;
 		private String libelleTypePlanification;
-
+		
 		private String description;
+		
+		@NotNull(message = "Cumpus est obligatoire !")
+		private Long idCumpus;
+		private String libelleCumpus;
 
 		@NotNull(message = "Les classes est obligatoire !")
 		@NotEmpty(message = "Au moins une classe est obligatoire !")

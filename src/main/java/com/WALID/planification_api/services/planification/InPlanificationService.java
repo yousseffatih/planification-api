@@ -26,8 +26,10 @@ public interface InPlanificationService {
 	         Long idModule,
 	         Long idType,
 	         String du,
-	        String au,
-	        Long idProf , 
+	         String au,
+	         Long idProf , 
+	         Long idCumpus, 
+	         Long idVille,
 	        int pageNo , int pageSize
 	    );
 

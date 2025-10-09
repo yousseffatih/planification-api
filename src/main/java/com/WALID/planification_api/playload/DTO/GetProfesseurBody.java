@@ -11,4 +11,6 @@ public class GetProfesseurBody {
 	private String dateFin;
 	private Long idClasse;
 	private Long idProf;
+	private Long idVille;
+	private Long idCumpus;
 }

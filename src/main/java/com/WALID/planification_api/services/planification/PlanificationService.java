@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -319,9 +320,9 @@ public class PlanificationService implements InPlanificationService{
 	
 	@Override
 	public PageableResponseDTO findFilteredPlanification(Long idSalle, Long idModule, Long idType, String du, String au,
-			 Long idProf , int pageNo , int pageSize) {
+			 Long idProf, Long idCumpus, Long idVille , int pageNo , int pageSize) {
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
-		Page<PlanificationsDTOProjection> v = planificationRepository.findFilteredPlanification(idSalle, idModule, idType, du, au, idProf, pageable);
+		Page<PlanificationsDTOProjection> v = planificationRepository.findFilteredPlanification(idSalle, idModule, idType, du, au, idProf,idCumpus,idVille, pageable);
 		List<PlanificationsDTOProjection> plan = v.getContent();
 		PageableResponseDTO  pageableResponseDTO = new PageableResponseDTO();
 		pageableResponseDTO.setContent(plan);

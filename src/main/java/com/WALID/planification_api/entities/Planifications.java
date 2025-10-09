@@ -69,6 +69,10 @@ public class Planifications extends ClassEntity{
     @JoinColumn(name="Type_planification_ID")
 	private ListAttribut typePlanification;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "CUMPUS_ID")
+	private Cumpus cumpus;
+	
 	
 	@Column(name = "DESCRIPTION")
 	@Size(max = 300)

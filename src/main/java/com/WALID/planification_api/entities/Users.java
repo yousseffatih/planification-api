@@ -61,4 +61,9 @@ public class Users extends ClassEntity{
 	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="ROLE_ID")
 	private Roles role;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="CUMPUS_ID")
+	private Cumpus cumpus;
+	
 }
