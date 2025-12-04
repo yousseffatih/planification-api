@@ -14,14 +14,13 @@ import com.WALID.planification_api.repositories.AuditLogRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * REST Controller for querying audit logs
- */
+
 @RestController
 @RequestMapping("/api/audit")
 public class AuditController {
     
-    private final AuditLogRepository auditLogRepository;
+    private final 
+     auditLogRepository;
     
     public AuditController(AuditLogRepository auditLogRepository) {
         this.auditLogRepository = auditLogRepository;

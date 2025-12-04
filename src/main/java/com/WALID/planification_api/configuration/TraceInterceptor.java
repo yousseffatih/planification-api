@@ -17,6 +17,7 @@ public class TraceInterceptor implements HandlerInterceptor {
     
     private static final String TRACE_ID_HEADER = "X-Trace-Id";
     private static final String SPAN_ID_HEADER = "X-Span-Id";
+    	
     
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -40,9 +41,8 @@ public class TraceInterceptor implements HandlerInterceptor {
             request.getSession().getId() : null);
         
         // Extract user ID from security context if available
-         context.setUserId(SecurityContextHolder.getContext()
+        context.setUserId(SecurityContextHolder.getContext()
              .getAuthentication().getName());
-         
         
         // Store in thread local
         TraceContextHolder.set(context);

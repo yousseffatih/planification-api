@@ -29,14 +29,12 @@ public class UserPrincipal implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-//		return Collections.singleton(new SimpleGrantedAuthority("USER"));
 		if(user.getRole()== null)
 		{
 			return null;
 		}
-		//return user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getRole().getNom())).collect(Collectors.toList());
-		//return null;
-		return List.of(new SimpleGrantedAuthority(user.getRole().getNom()));
+		System.out.println("Role : "+user.getRole().getNom());
+		return List.of(new SimpleGrantedAuthority("ROLE_"+user.getRole().getNom()));
 	}
 
 	@Override
