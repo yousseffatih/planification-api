@@ -19,11 +19,9 @@ import com.WALID.planification_api.repositories.UserRepository;
 import com.WALID.planification_api.services.Users.InUsersServices;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/users")
-@RequiredArgsConstructor
 public class UserController {
 
 	@Autowired
@@ -33,61 +31,54 @@ public class UserController {
 	private UserRepository userRepository;
 
 	@GetMapping("")
-	private ResponseEntity<List<UsersDTO>> getlistUsers()
-	{
+	public ResponseEntity<List<UsersDTO>> getlistUsers() {
 		List<UsersDTO> userDTOs = usersServices.getUsers();
 		return new ResponseEntity<>(userDTOs, HttpStatus.OK);
 	}
 
-
 	@GetMapping("/{id}")
-	private ResponseEntity<UsersDTO> getlistUsersById(@PathVariable Long id)
-	{
+	public ResponseEntity<UsersDTO> getlistUsersById(@PathVariable Long id) {
 		UsersDTO userDTO = usersServices.getUsers(id);
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);
 	}
 
 	@PostMapping("")
-	private ResponseEntity<?> addUser(@Valid @RequestBody UsersDTO userDTO)
-	{
+	public ResponseEntity<?> addUser(@Valid @RequestBody UsersDTO userDTO) {
 		boolean ifUsernameExists = userRepository.existsByUsernameAndStatut(userDTO.getUsername());
-		if(ifUsernameExists)
-		{
-			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new MessageResponse("Username existe déjà !" , "warning"));
+		if (ifUsernameExists) {
+			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+					.body(new MessageResponse("Username existe déjà !", "warning"));
 		}
 		usersServices.addUsers(userDTO);
-		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur ajouté.","success"));
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur ajouté.", "success"));
 	}
 
 	@GetMapping("/desactiveUser/{id}")
-	private ResponseEntity<?> desactiverUser(@PathVariable Long id)
-	{
+	public ResponseEntity<?> desactiverUser(@PathVariable Long id) {
 		usersServices.desactiveUser(id);
-		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur désactivé.","success"));
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur désactivé.", "success"));
 
 	}
 
 	@GetMapping("/activeUser/{id}")
-	private ResponseEntity<?> activerUser(@PathVariable Long id)
-	{
+	public ResponseEntity<?> activerUser(@PathVariable Long id) {
 		usersServices.activeUser(id);
-		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur activé.","success"));
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur activé.", "success"));
 
 	}
-	
+
 	@GetMapping("/refrechPassword/{id}")
-	private ResponseEntity<?> refrechPassword(@PathVariable Long id)
-	{
+	public ResponseEntity<?> refrechPassword(@PathVariable Long id) {
 		usersServices.refrechPassword(id);
-		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Rerfreche password avec succee.","success"));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new MessageResponse("Rerfreche password avec succee.", "success"));
 
 	}
 
 	@GetMapping("/delete/{id}")
-	private ResponseEntity<?> deleteUser(@PathVariable Long id)
-	{
+	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		usersServices.deleteUsersStatut(id);
-		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur supprimé.","success"));
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur supprimé.", "success"));
 
 	}
 }

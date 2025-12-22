@@ -1,8 +1,5 @@
 package com.WALID.planification_api.configuration;
 
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +23,6 @@ import com.WALID.planification_api.exceptions.GlobalExceptionHandler;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Configuration
 @EnableWebMvc
 @RequiredArgsConstructor
@@ -39,49 +35,46 @@ public class SecurityConfig {
 	private JWTAuthenticationFilter jwtFilter;
 
 	@Bean
-	public  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
-	{
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.cors(cors -> cors.configurationSource(request -> {
-		            CorsConfiguration config = new CorsConfiguration();
-		            config.setAllowCredentials(false);
-		            config.addAllowedOrigin("*");
-		            config.addAllowedHeader("*");
-		            config.addAllowedMethod("*");
-		            config.addExposedHeader("Authorization");
-		            return config;
-	        	}))
-			.csrf(csrf -> csrf.disable())
-			.authorizeHttpRequests(request -> request
-					.requestMatchers("/api/auth/**").permitAll()
-					.requestMatchers("/api/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-					.requestMatchers("/api/roles/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-					.requestMatchers("/api/planification/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
-					.requestMatchers("/api/salles/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
-					.requestMatchers("/api/classes/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
-					.requestMatchers("/api/cumpus/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
-					.requestMatchers("/api/professeurs/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
-					.requestMatchers("/api/villes/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
-					.requestMatchers("/api/audit/**").hasAnyRole("SUPER_ADMIN")
-					.anyRequest().authenticated())
-			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-		 return http.build();
+				.cors(cors -> cors.configurationSource(request -> {
+					CorsConfiguration config = new CorsConfiguration();
+					config.setAllowCredentials(false);
+					config.addAllowedOrigin("*");
+					config.addAllowedHeader("*");
+					config.addAllowedMethod("*");
+					config.addExposedHeader("Authorization");
+					return config;
+				}))
+				.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(request -> request
+						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/api/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/roles/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/planification/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/salles/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/classes/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/cumpus/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/professeurs/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/villes/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/audit/**").hasAnyRole("SUPER_ADMIN")
+						.anyRequest().authenticated())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+		return http.build();
 	}
 
-
 	@Bean
-    public StrictHttpFirewall allowDoubleSlashesHttpFirewall() {
-        StrictHttpFirewall firewall = new StrictHttpFirewall();
-        firewall.setAllowUrlEncodedDoubleSlash(true);
-        return firewall;
-    }
+	public StrictHttpFirewall allowDoubleSlashesHttpFirewall() {
+		StrictHttpFirewall firewall = new StrictHttpFirewall();
+		firewall.setAllowUrlEncodedDoubleSlash(true);
+		return firewall;
+	}
 
 	@Bean
 	public RestTemplate restTemplate() {
-	    return new RestTemplate();
+		return new RestTemplate();
 	}
-
 
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
@@ -103,6 +96,6 @@ public class SecurityConfig {
 
 	@Bean
 	public GlobalExceptionHandler globalSecurityExceptionHandler() {
-	    return new GlobalExceptionHandler();
+		return new GlobalExceptionHandler();
 	}
 }

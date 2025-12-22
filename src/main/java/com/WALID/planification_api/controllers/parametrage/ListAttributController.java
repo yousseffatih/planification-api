@@ -35,75 +35,70 @@ public class ListAttributController {
 
 	@Autowired
 	private ListAttributRepository listAttributRepository;
-	
-	
-	  @GetMapping("")
-	    public ResponseEntity<List<ListAttributDTO>> getAllResponseEntity()
-	    {
-	        List<ListAttributDTO> classesDTOs = listAttributeServices.getList();
-	        return new ResponseEntity<>(classesDTOs , HttpStatus.OK);
-	    }
+
+	@GetMapping("")
+	public ResponseEntity<List<ListAttributDTO>> getAllResponseEntity() {
+		List<ListAttributDTO> classesDTOs = listAttributeServices.getList();
+		return new ResponseEntity<>(classesDTOs, HttpStatus.OK);
+	}
 
 	@PostMapping("")
-    public ResponseEntity<?> addClasse(@Valid @RequestBody ListAttributDTO listAttribut) {
-		boolean ifLibelleExist = listAttributRepository.existsByLibelleAndStatut(listAttribut.getLibelle(), GlobalConstant.STATUT_ACTIF);
-    	if(ifLibelleExist)
-    	{
-    		return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new MessageResponse("Libelle existe déjà !", "warning") );
-    	}
+	public ResponseEntity<?> addClasse(@Valid @RequestBody ListAttributDTO listAttribut) {
+		boolean ifLibelleExist = listAttributRepository.existsByLibelleAndStatut(listAttribut.getLibelle(),
+				GlobalConstant.STATUT_ACTIF);
+		if (ifLibelleExist) {
+			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+					.body(new MessageResponse("Libelle existe déjà !", "warning"));
+		}
 		listAttributeServices.addListAttribute(listAttribut);
-    	return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Ajouté avec succès.","success"));
-    }
-	
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Ajouté avec succès.", "success"));
+	}
+
 	@PutMapping("/{id}")
-	 public ResponseEntity<?> updateAttribute(@PathVariable Long id,@Valid @RequestBody ListAttributDTO listAttribut) {
-			boolean ifLibelleExist = listAttributRepository.existsByLibelleAndStatut(listAttribut.getLibelle(), GlobalConstant.STATUT_ACTIF);
-	    	if(ifLibelleExist)
-	    	{
-	    		return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new MessageResponse("Libelle existe déjà !", "warning") );
-	    	}
-			listAttributeServices.updateListAttribute(id,listAttribut);
-	    	return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Ajouté avec succès.","success"));
-	 }
-	
-	
+	public ResponseEntity<?> updateAttribute(@PathVariable Long id, @Valid @RequestBody ListAttributDTO listAttribut) {
+		boolean ifLibelleExist = listAttributRepository.existsByLibelleAndStatut(listAttribut.getLibelle(),
+				GlobalConstant.STATUT_ACTIF);
+		if (ifLibelleExist) {
+			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+					.body(new MessageResponse("Libelle existe déjà !", "warning"));
+		}
+		listAttributeServices.updateListAttribute(id, listAttribut);
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Ajouté avec succès.", "success"));
+	}
+
 	@GetMapping("/{id}")
-	 public ResponseEntity<?> deleteClasse(@PathVariable Long id) {
-        listAttributeServices.deleteAttributDTO(id);
-        return  ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Supprimé avec succés.","success"));
-    }
-	
+	public ResponseEntity<?> deleteClasse(@PathVariable Long id) {
+		listAttributeServices.deleteAttributDTO(id);
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Supprimé avec succés.", "success"));
+	}
+
 	@GetMapping("/listTypes")
 	public ResponseEntity<List<ListAttributAUTO>> getNamesOfList() {
-	    List<ListAttributAUTO> list = Arrays.asList(
-	        new ListAttributAUTO(1L, "List des Type salles", "listTypeSalles"),
-	        new ListAttributAUTO(2L, "List des types planification", "listTypePlanification"),
-	        new ListAttributAUTO(3L, "List des types professeurs", "listTypeProfesseurs")
-	    );
+		List<ListAttributAUTO> list = Arrays.asList(
+				new ListAttributAUTO(1L, "List des Type salles", "listTypeSalles"),
+				new ListAttributAUTO(2L, "List des types planification", "listTypePlanification"),
+				new ListAttributAUTO(3L, "List des types professeurs", "listTypeProfesseurs"));
 
-	    return ResponseEntity.ok(list);
+		return ResponseEntity.ok(list);
 	}
-	
-	//- - - - - - - - - - - - -   Functions  -- - - - - - - - - - - - 
+
+	// - - - - - - - - - - - - - Functions -- - - - - - - - - - - -
 
 	@GetMapping("/listTypeSalles")
-	public ResponseEntity<List<ListAttributAUTO>> listTypeSalles()
-	{
-		List<ListAttributAUTO> list= listAttributeServices.getListAttributes("listTypeSalles");
-		return new ResponseEntity<>(list , HttpStatus.OK);
-    }
+	public ResponseEntity<List<ListAttributAUTO>> listTypeSalles() {
+		List<ListAttributAUTO> list = listAttributeServices.getListAttributes("listTypeSalles");
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
 
-   @GetMapping("/listTypePlanification")
-	public ResponseEntity<List<ListAttributAUTO>> listTypeTypePlanification()
-	{
-		List<ListAttributAUTO> list= listAttributeServices.getListAttributes("listTypePlanification");
-		return new ResponseEntity<>(list , HttpStatus.OK);
-   }
-	
+	@GetMapping("/listTypePlanification")
+	public ResponseEntity<List<ListAttributAUTO>> listTypeTypePlanification() {
+		List<ListAttributAUTO> list = listAttributeServices.getListAttributes("listTypePlanification");
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
 	@GetMapping("/listTypeProfesseurs")
-	public ResponseEntity<List<ListAttributAUTO>> listTypeProfess()
-	{
-		List<ListAttributAUTO> list= listAttributeServices.getListAttributes("listTypeProfesseurs");
-		return new ResponseEntity<>(list , HttpStatus.OK);
-    }
+	public ResponseEntity<List<ListAttributAUTO>> listTypeProfess() {
+		List<ListAttributAUTO> list = listAttributeServices.getListAttributes("listTypeProfesseurs");
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
 }

@@ -16,17 +16,15 @@ import com.WALID.planification_api.playload.DTO.UsersDTO;
 import com.WALID.planification_api.repositories.UserRepository;
 import com.WALID.planification_api.repositories.Parametrage.RolesRepository;
 
-
-
 @Service
-public class UsersServicesImp implements InUsersServices{
+public class UsersServicesImp implements InUsersServices {
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
-	private  PasswordEncoder passwordEncoder;
-	
+	private PasswordEncoder passwordEncoder;
+
 	@Autowired
 	private RolesRepository rolesRepository;
 
@@ -39,16 +37,17 @@ public class UsersServicesImp implements InUsersServices{
 
 	@Override
 	public UsersDTO getUsers(Long id) {
-		Users user = userRepository.findByIdAndStatutList(id).orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
+		Users user = userRepository.findByIdAndStatutList(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
 		return mapToDTO(user);
 	}
 
 	@Override
 	public UsersDTO addUsers(UsersDTO userDTO) {
 		Roles role = rolesRepository.findByIdStatut(userDTO.getIdRole())
-                .orElseThrow(() -> new ResourceNotFoundException("Role", "id", userDTO.getIdRole()));
-		
-		Users addUser =new Users();
+				.orElseThrow(() -> new ResourceNotFoundException("Role", "id", userDTO.getIdRole()));
+
+		Users addUser = new Users();
 
 		addUser.setStatut(GlobalConstant.STATUT_ACTIF);
 		addUser.setDateCreation(new Date());
@@ -63,49 +62,46 @@ public class UsersServicesImp implements InUsersServices{
 
 		return mapToDTO(userRepository.save(addUser));
 	}
-	
 
 	@Override
 	public UsersDTO deleteUsersStatut(Long id) {
 		Users user = userRepository.findByIdAndStatutList(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
-	   user.setStatut(GlobalConstant.STATUT_DELETE);
-	   user.setDateDesactivation(new Date());
-	   return mapToDTO(userRepository.save(user));
+				.orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
+		user.setStatut(GlobalConstant.STATUT_DELETE);
+		user.setDateDesactivation(new Date());
+		return mapToDTO(userRepository.save(user));
 	}
 
 	@Override
 	public UsersDTO desactiveUser(Long id) {
 		Users user = userRepository.findByIdAndStatutList(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
-	   user.setStatut(GlobalConstant.STATUT_INACTIF);
-	   user.setDateModification(new Date());
-	   return mapToDTO(userRepository.save(user));
+				.orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
+		user.setStatut(GlobalConstant.STATUT_INACTIF);
+		user.setDateModification(new Date());
+		return mapToDTO(userRepository.save(user));
 	}
-	
+
 	@Override
 	public UsersDTO activeUser(Long id) {
 		Users user = userRepository.findByIdAndStatutList(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
-	   user.setStatut(GlobalConstant.STATUT_ACTIF);
-	   user.setDateModification(new Date());
-	   return mapToDTO(userRepository.save(user));
+				.orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
+		user.setStatut(GlobalConstant.STATUT_ACTIF);
+		user.setDateModification(new Date());
+		return mapToDTO(userRepository.save(user));
 	}
-	
+
 	@Override
 	public void refrechPassword(Long id) {
 		Users user = userRepository.findByIdAndStatutList(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
-	   user.setStatut(GlobalConstant.STATUT_ACTIF);
-	   user.setDateModification(new Date());
-	   user.setPassword(passwordEncoder.encode(user.getUsername()));
-	   user.setFirst("1");
-	   userRepository.save(user);
+				.orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
+		user.setStatut(GlobalConstant.STATUT_ACTIF);
+		user.setDateModification(new Date());
+		user.setPassword(passwordEncoder.encode(user.getUsername()));
+		user.setFirst("1");
+		userRepository.save(user);
 	}
 
-
-	private UsersDTO mapToDTO(Users x)
-	{
+	private UsersDTO mapToDTO(Users x) {
 		UsersDTO dto = new UsersDTO();
 		dto.setId(x.getId());
 		dto.setUsername(x.getUsername());
@@ -121,5 +117,4 @@ public class UsersServicesImp implements InUsersServices{
 		return dto;
 	}
 
-	
 }
