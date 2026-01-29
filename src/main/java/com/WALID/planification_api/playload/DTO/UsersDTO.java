@@ -6,6 +6,7 @@ import java.util.Date;
 //import com.WALID.planification_api.entities.Roles;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,7 @@ public class UsersDTO {
 
     private String password;
 
+    @Email
     private String email;
 
     private String first;

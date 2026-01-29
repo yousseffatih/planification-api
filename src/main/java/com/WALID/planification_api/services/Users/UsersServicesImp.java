@@ -29,14 +29,14 @@ public class UsersServicesImp implements InUsersServices {
 	private RolesRepository rolesRepository;
 
 	@Override
-	public List<UsersDTO> getUsers() {
-		List<Users> list = userRepository.findUsersByStatut();
+	public List<UsersDTO> getAllUsers(Long id) {
+		List<Users> list = userRepository.findUsersByStatut(id);
 		List<UsersDTO> listsDtos = list.stream().map((l) -> mapToDTO(l)).collect(Collectors.toList());
 		return listsDtos;
 	}
 
 	@Override
-	public UsersDTO getUsers(Long id) {
+	public UsersDTO getUserById(Long id) {
 		Users user = userRepository.findByIdAndStatutList(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
 		return mapToDTO(user);
