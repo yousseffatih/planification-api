@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +17,7 @@ import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.playload.MessageResponse;
 import com.WALID.planification_api.playload.DTO.UsersDTO;
 import com.WALID.planification_api.repositories.UserRepository;
+import com.WALID.planification_api.services.Security.JWTService;
 import com.WALID.planification_api.services.Users.InUsersServices;
 
 import jakarta.validation.Valid;
@@ -30,15 +32,23 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private JWTService jwtService;
+
 	@GetMapping("")
-	public ResponseEntity<List<UsersDTO>> getlistUsers() {
-		List<UsersDTO> userDTOs = usersServices.getUsers();
+	public ResponseEntity<List<UsersDTO>> getlistUsers(@RequestHeader("Authorization") String token) {
+		if (token != null && token.startsWith("Bearer ")) {
+			token = token.substring(7);
+		}
+		Long idToken = jwtService.extractUserId(token);
+		System.out.println("idToken =======> " + idToken);
+		List<UsersDTO> userDTOs = usersServices.getAllUsers(idToken);
 		return new ResponseEntity<>(userDTOs, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UsersDTO> getlistUsersById(@PathVariable Long id) {
-		UsersDTO userDTO = usersServices.getUsers(id);
+		UsersDTO userDTO = usersServices.getUserById(id);
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);
 	}
 

@@ -4,20 +4,19 @@ import java.util.List;
 
 import com.WALID.planification_api.playload.DTO.UsersDTO;
 
-
 public interface InUsersServices {
 
-	public List<UsersDTO> getUsers();
+	public List<UsersDTO> getAllUsers(Long idToken);
 
-	public UsersDTO getUsers(Long id);
+	public UsersDTO getUserById(Long id);
 
 	public UsersDTO addUsers(UsersDTO userDTO);
 
 	public UsersDTO desactiveUser(Long id);
-	
+
 	public UsersDTO activeUser(Long id);
 
 	public UsersDTO deleteUsersStatut(Long id);
-	
+
 	public void refrechPassword(Long id);
 }

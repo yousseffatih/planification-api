@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public abstract class ClassEntity {
 
 	@Size(max = 20)
-	@Column(name="STATUT", length = 20)
+	@Column(name = "STATUT", length = 20)
 	protected String statut;
 
 	@Column(name = "DATE_CREATION")
@@ -27,7 +27,11 @@ public abstract class ClassEntity {
 
 	@Column(name = "DATE_MODIFICATION")
 	protected Date dateModification;
-	
+
+	@Column(name = "MOTIF")
 	protected String motif;
-	
+
+	@Column(name = "LIBELLE")
+	protected String libelle;
+
 }

@@ -14,8 +14,8 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 	@Query("SELECT us FROM Users us WHERE us.statut IN ('actif') AND us.username =:val ")
 	Optional<Users> findByUsernameStatut(@Param("val") String username);
 
-	@Query("SELECT us FROM Users us WHERE us.statut IN ('actif', 'inActif')")
-	List<Users> findUsersByStatut();
+	@Query("SELECT us FROM Users us WHERE us.statut IN ('actif', 'inActif') AND us.id <> :val ")
+	List<Users> findUsersByStatut(@Param("val") Long id);
 
 	int countUsersByStatut(String statut);
 
