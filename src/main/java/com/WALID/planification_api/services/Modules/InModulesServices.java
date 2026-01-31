@@ -5,18 +5,17 @@ import java.util.List;
 import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.ModulesDTO;
 
-
 public interface InModulesServices {
 
-	public List<ModulesDTO> getAllModules();
-	
-	public List<ListAttributAUTO> getModulesListApi();
+    public List<ModulesDTO> getAllModules();
+
+    public List<ListAttributAUTO> getModulesListApi();
 
     public ModulesDTO getModuleById(Long id);
 
     public ModulesDTO addModule(ModulesDTO modulesDTO);
 
-    public void deleteModule(Long id);
+    public void deleteModule(Long id, String motif);
 
-    public ModulesDTO updateModule(Long idLong , ModulesDTO modulesDTO);
+    public ModulesDTO updateModule(Long idLong, ModulesDTO modulesDTO);
 }

@@ -54,11 +54,12 @@ public class ClassesServiceImp implements InClassesServices {
     }
 
     @Override
-    public void deleteClasse(Long id) {
+    public void deleteClasse(Long id, String motif) {
         Classes cls = classesRepository.findByIdStatut(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Classe", "id", id));
         cls.setDateDesactivation(new Date());
         cls.setStatut(GlobalConstant.STATUT_DELETE);
+        cls.setMotif(motif);
         classesRepository.save(cls);
     }
 

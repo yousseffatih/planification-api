@@ -1,6 +1,7 @@
 package com.WALID.planification_api.controllers.parametrage;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.WALID.planification_api.constants.GlobalConstant;
@@ -85,9 +87,13 @@ public class UserController {
 
 	}
 
-	@GetMapping("/delete/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-		usersServices.deleteUsersStatut(id);
+	@PostMapping("/delete/{id}")
+	public ResponseEntity<?> deleteUser(@PathVariable Long id, @RequestParam Map<String, String> motif) {
+		if (motif.get("motif") == null || motif.get("motif").isEmpty()) {
+			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+					.body(new MessageResponse("Motif manquant.", "warning"));
+		}
+		usersServices.deleteUsersStatut(id, motif.get("motif"));
 		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Utilisateur supprimé.", "success"));
 
 	}

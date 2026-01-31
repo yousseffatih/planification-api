@@ -14,29 +14,29 @@ import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.VillesDTO;
 import com.WALID.planification_api.repositories.Parametrage.VillesRepository;
 
-
 @Service
-public class VillesServices implements InVillesServices{
-	
+public class VillesServices implements InVillesServices {
+
 	@Autowired
 	private VillesRepository villeRepository;
 
 	@Override
 	public List<VillesDTO> getAllVilles() {
 		List<Villes> villes = villeRepository.findAllWithStatus();
-        return  villes.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
+		return villes.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<ListAttributAUTO> getVillesListApi() {
 		List<Villes> villes = villeRepository.getClassesListApi();
-        return  villes.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
+		return villes.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public VillesDTO getVilleById(Long id) {
-		 Villes ville = villeRepository.findByIdStatut(id).orElseThrow(() -> new ResourceNotFoundException("Ville","id",id));
-	     return  mapToDTO(ville);
+		Villes ville = villeRepository.findByIdStatut(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Ville", "id", id));
+		return mapToDTO(ville);
 	}
 
 	@Override
@@ -48,20 +48,23 @@ public class VillesServices implements InVillesServices{
 		ville.setNom(villesDTO.getNom());
 		ville.setLibelle(GlobalConstant.formatName(villesDTO.getNom()));
 		villeRepository.save(ville);
-        return mapToDTO(ville);
+		return mapToDTO(ville);
 	}
 
 	@Override
-	public void deleteVille(Long id) {
-		 Villes ville = villeRepository.findByIdStatut(id).orElseThrow(() -> new ResourceNotFoundException("Ville","id",id));
-		 ville.setStatut(GlobalConstant.STATUT_DELETE);
-		 ville.setDateDesactivation(new Date());
-	     villeRepository.save(ville);
+	public void deleteVille(Long id, String motif) {
+		Villes ville = villeRepository.findByIdStatut(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Ville", "id", id));
+		ville.setStatut(GlobalConstant.STATUT_DELETE);
+		ville.setDateDesactivation(new Date());
+		ville.setMotif(motif);
+		villeRepository.save(ville);
 	}
 
 	@Override
 	public VillesDTO updateVille(Long idLong, VillesDTO villesDTO) {
-		Villes ville = villeRepository.findByIdStatut(idLong).orElseThrow(() -> new ResourceNotFoundException("Ville","id",idLong));
+		Villes ville = villeRepository.findByIdStatut(idLong)
+				.orElseThrow(() -> new ResourceNotFoundException("Ville", "id", idLong));
 		ville.setDateModification(new Date());
 		ville.setStatut(villesDTO.getStatut());
 		ville.setMotif(villesDTO.getMotif());
@@ -70,30 +73,26 @@ public class VillesServices implements InVillesServices{
 		villeRepository.save(ville);
 		return mapToDTO(ville);
 	}
-	
-	
-	private VillesDTO mapToDTO(Villes x)
-    {
+
+	private VillesDTO mapToDTO(Villes x) {
 		VillesDTO dto = new VillesDTO();
-        dto.setId(x.getId());
-        dto.setNom(x.getNom());
-        dto.setMotif(x.getMotif());
-       
+		dto.setId(x.getId());
+		dto.setNom(x.getNom());
+		dto.setMotif(x.getMotif());
 
-        dto.setStatut(x.getStatut());
-        dto.setDateCreation(x.getDateCreation());
-        dto.setDateDesactivation(x.getDateDesactivation());
-        dto.setDateModification(x.getDateModification());
-        return dto;
-    }
-    
-    private ListAttributAUTO mapToList(Villes x)
-    {
+		dto.setStatut(x.getStatut());
+		dto.setDateCreation(x.getDateCreation());
+		dto.setDateDesactivation(x.getDateDesactivation());
+		dto.setDateModification(x.getDateModification());
+		return dto;
+	}
+
+	private ListAttributAUTO mapToList(Villes x) {
 		ListAttributAUTO dto = new ListAttributAUTO();
-        dto.setId(x.getId());
-        dto.setLibelle(x.getNom());
+		dto.setId(x.getId());
+		dto.setLibelle(x.getNom());
 
-        return dto;
-    }
-   
+		return dto;
+	}
+
 }

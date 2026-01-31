@@ -1,7 +1,7 @@
 package com.WALID.planification_api.controllers.parametrage;
 
-
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +22,9 @@ import com.WALID.planification_api.repositories.Parametrage.ClassesRepository;
 import com.WALID.planification_api.services.Classes.InClassesServices;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
 
 @RestController
 @RequestMapping("/api/classes")
-@RequiredArgsConstructor
 public class ClassesController {
 
     @Autowired
@@ -36,60 +33,57 @@ public class ClassesController {
     @Autowired
     private ClassesRepository classesRepository;
 
-
     @GetMapping("")
-    public ResponseEntity<List<ClassesDTO>> getAllResponseEntity()
-    {
+    public ResponseEntity<List<ClassesDTO>> getAllResponseEntity() {
         List<ClassesDTO> classesDTOs = classesServices.getAllClasses();
-        return new ResponseEntity<>(classesDTOs , HttpStatus.OK);
-    }
-    
-    @GetMapping("/listClasses")
-    public ResponseEntity<List<ListAttributAUTO>> getListModules()
-    {
-        List<ListAttributAUTO> modulesDTOs = classesServices.getClassesListApi();
-        return new ResponseEntity<>(modulesDTOs , HttpStatus.OK);
+        return new ResponseEntity<>(classesDTOs, HttpStatus.OK);
     }
 
+    @GetMapping("/listClasses")
+    public ResponseEntity<List<ListAttributAUTO>> getListModules() {
+        List<ListAttributAUTO> modulesDTOs = classesServices.getClassesListApi();
+        return new ResponseEntity<>(modulesDTOs, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClassesDTO> getClasseById(@PathVariable Long id) {
 
         ClassesDTO classesDTO = classesServices.getClasseById(id);
-        return new ResponseEntity<>(classesDTO,HttpStatus.OK);
+        return new ResponseEntity<>(classesDTO, HttpStatus.OK);
     }
 
     @PostMapping("")
     public ResponseEntity<?> addClasse(@Valid @RequestBody ClassesDTO classesDTO) {
-    	boolean ifNomExist = classesRepository.existsByNomAndStatut(classesDTO.getNom(), GlobalConstant.STATUT_ACTIF);
-    	if(ifNomExist)
-    	{
-    		return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new MessageResponse("Le nom existe déjà !", "warning") );
-    	}
-    	
-    	classesServices.addClasse(classesDTO);
-    	return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Classe ajoutée.","success"));
+        boolean ifNomExist = classesRepository.existsByNomAndStatut(classesDTO.getNom(), GlobalConstant.STATUT_ACTIF);
+        if (ifNomExist) {
+            return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+                    .body(new MessageResponse("Le nom existe déjà !", "warning"));
+        }
+
+        classesServices.addClasse(classesDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Classe ajoutée.", "success"));
     }
 
-    @GetMapping("/delete/{id}")
-    public ResponseEntity<?> deleteClasse(@PathVariable Long id) {
-        classesServices.deleteClasse(id);
-        return  ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Classe supprimée.","success"));
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> deleteClasse(@PathVariable Long id, @RequestBody Map<String, String> motif) {
+        if (motif.get("motif") == null || motif.get("motif").isEmpty()) {
+            return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+                    .body(new MessageResponse("Le motif est obligatoire !", "warning"));
+        }
+        classesServices.deleteClasse(id, motif.get("motif"));
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Classe supprimée.", "success"));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateClasses(@PathVariable Long id,@Valid @RequestBody ClassesDTO classesDTO)
-    {
-    	boolean ifNomModifExists = classesRepository.existsByNomModif(classesDTO.getNom(),id);
-    	if(ifNomModifExists)
-    	{
-    		return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new MessageResponse("Le nom existe déjà !", "warning") );
-    	}
-    	classesServices.updateClasse(id,classesDTO);
-    	return  ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Classe modifiée.","success"));
+    public ResponseEntity<?> updateClasses(@PathVariable Long id, @Valid @RequestBody ClassesDTO classesDTO) {
+        boolean ifNomModifExists = classesRepository.existsByNomModif(classesDTO.getNom(), id);
+        if (ifNomModifExists) {
+            return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+                    .body(new MessageResponse("Le nom existe déjà !", "warning"));
+        }
+        classesServices.updateClasse(id, classesDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Classe modifiée.", "success"));
 
     }
-
-
 
 }

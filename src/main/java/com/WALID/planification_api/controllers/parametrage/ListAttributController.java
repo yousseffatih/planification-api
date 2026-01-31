@@ -18,7 +18,6 @@ import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.playload.MessageResponse;
 import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.ListAttributDTO;
-import com.WALID.planification_api.playload.DTO.ProfesseurDTO;
 import com.WALID.planification_api.repositories.Parametrage.ListAttributRepository;
 import com.WALID.planification_api.services.ListAttribut.InListAttributeServices;
 

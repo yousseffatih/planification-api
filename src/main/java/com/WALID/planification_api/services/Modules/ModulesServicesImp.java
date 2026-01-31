@@ -15,10 +15,8 @@ import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.ModulesDTO;
 import com.WALID.planification_api.repositories.Parametrage.ModulesRepository;
 
-
-
 @Service
-public class ModulesServicesImp implements InModulesServices{
+public class ModulesServicesImp implements InModulesServices {
 
 	@Autowired
 	private ModulesRepository modulesRepository;
@@ -26,19 +24,20 @@ public class ModulesServicesImp implements InModulesServices{
 	@Override
 	public List<ModulesDTO> getAllModules() {
 		List<Modules> modules = modulesRepository.findAllWithStatus();
-        return  modules.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
+		return modules.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public List<ListAttributAUTO> getModulesListApi() {
 		List<Modules> modules = modulesRepository.findAllWithStatusListApi();
-        return  modules.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
+		return modules.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public ModulesDTO getModuleById(Long id) {
-		Modules module = modulesRepository.findByIdStatut(id).orElseThrow(() -> new ResourceNotFoundException("Module","id",id));
-        return  mapToDTO(module);
+		Modules module = modulesRepository.findByIdStatut(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));
+		return mapToDTO(module);
 	}
 
 	@Override
@@ -49,49 +48,50 @@ public class ModulesServicesImp implements InModulesServices{
 		module.setStatut(GlobalConstant.STATUT_ACTIF);
 		module.setNom(moduleDto.getNom());
 		Modules mdl = modulesRepository.save(module);
-	    return mapToDTO(mdl);
+		return mapToDTO(mdl);
 	}
 
 	@Override
-	public void deleteModule(Long id) {
-		Modules mdl = modulesRepository.findByIdStatut(id).orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));
-        mdl.setDateDesactivation(new Date());
-        mdl.setStatut(GlobalConstant.STATUT_DELETE);
-        modulesRepository.save(mdl);
+	public void deleteModule(Long id, String motif) {
+		Modules mdl = modulesRepository.findByIdStatut(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));
+		mdl.setDateDesactivation(new Date());
+		mdl.setStatut(GlobalConstant.STATUT_DELETE);
+		mdl.setMotif(motif);
+		modulesRepository.save(mdl);
 
 	}
 
 	@Override
 	public ModulesDTO updateModule(Long id, ModulesDTO modulesDTO) {
-		Modules module = modulesRepository.findByIdStatut(id).orElseThrow(()-> new ResourceNotFoundException("Module", "id", id));
+		Modules module = modulesRepository.findByIdStatut(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));
 
 		module.setNom(modulesDTO.getNom());
-    	module.setStatut(modulesDTO.getStatut());
+		module.setStatut(modulesDTO.getStatut());
 		module.setDateModification(new Date());
 
-    	Modules mdl = modulesRepository.save(module);
+		Modules mdl = modulesRepository.save(module);
 		return mapToDTO(mdl);
 	}
 
-	private ModulesDTO mapToDTO(Modules x)
-    {
+	private ModulesDTO mapToDTO(Modules x) {
 		ModulesDTO dto = new ModulesDTO();
-        dto.setId(x.getId());
-        dto.setNom(x.getNom());
+		dto.setId(x.getId());
+		dto.setNom(x.getNom());
 
-        dto.setStatut(x.getStatut());
-        dto.setDateCreation(x.getDateCreation());
-        dto.setDateDesactivation(x.getDateDesactivation());
-        dto.setDateModification(x.getDateModification());
-        return dto;
-    }
-	
-	private ListAttributAUTO mapToList(Modules x)
-    {
+		dto.setStatut(x.getStatut());
+		dto.setDateCreation(x.getDateCreation());
+		dto.setDateDesactivation(x.getDateDesactivation());
+		dto.setDateModification(x.getDateModification());
+		return dto;
+	}
+
+	private ListAttributAUTO mapToList(Modules x) {
 		ListAttributAUTO dto = new ListAttributAUTO();
-        dto.setId(x.getId());
-        dto.setLibelle(x.getNom());
+		dto.setId(x.getId());
+		dto.setLibelle(x.getNom());
 
-        return dto;
-    }
+		return dto;
+	}
 }

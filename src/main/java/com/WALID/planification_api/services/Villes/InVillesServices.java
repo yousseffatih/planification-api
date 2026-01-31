@@ -6,16 +6,16 @@ import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.VillesDTO;
 
 public interface InVillesServices {
-	
-	    public List<VillesDTO> getAllVilles();
-	    
-	    public List<ListAttributAUTO> getVillesListApi();
 
-	    public VillesDTO getVilleById(Long id);
+	public List<VillesDTO> getAllVilles();
 
-	    public VillesDTO addVille(VillesDTO classesDTO);
+	public List<ListAttributAUTO> getVillesListApi();
 
-	    public void deleteVille(Long id);
+	public VillesDTO getVilleById(Long id);
 
-	    public VillesDTO updateVille(Long idLong , VillesDTO classesDTO);
+	public VillesDTO addVille(VillesDTO classesDTO);
+
+	public void deleteVille(Long id, String motif);
+
+	public VillesDTO updateVille(Long idLong, VillesDTO classesDTO);
 }

@@ -64,11 +64,12 @@ public class UsersServicesImp implements InUsersServices {
 	}
 
 	@Override
-	public UsersDTO deleteUsersStatut(Long id) {
+	public UsersDTO deleteUsersStatut(Long id, String motif) {
 		Users user = userRepository.findByIdAndStatutList(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Utilisateur", "id", id));
 		user.setStatut(GlobalConstant.STATUT_DELETE);
 		user.setDateDesactivation(new Date());
+		user.setMotif(motif);
 		return mapToDTO(userRepository.save(user));
 	}
 

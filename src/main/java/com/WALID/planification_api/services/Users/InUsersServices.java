@@ -16,7 +16,7 @@ public interface InUsersServices {
 
 	public UsersDTO activeUser(Long id);
 
-	public UsersDTO deleteUsersStatut(Long id);
+	public UsersDTO deleteUsersStatut(Long id, String motif);
 
 	public void refrechPassword(Long id);
 }

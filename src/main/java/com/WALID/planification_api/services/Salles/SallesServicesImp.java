@@ -17,10 +17,8 @@ import com.WALID.planification_api.playload.DTO.SallesDTO;
 import com.WALID.planification_api.repositories.Parametrage.ListAttributRepository;
 import com.WALID.planification_api.repositories.Parametrage.SallesRepository;
 
-
-
 @Service
-public class SallesServicesImp implements InSallesServices{
+public class SallesServicesImp implements InSallesServices {
 
 	@Autowired
 	private SallesRepository sallesRepository;
@@ -31,39 +29,41 @@ public class SallesServicesImp implements InSallesServices{
 	@Override
 	public List<SallesDTO> getAllSalles() {
 		List<Salles> salles = sallesRepository.getSallesListApi();
-        return  salles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
+		return salles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<SallesDTO> availableSalles(Date date , LocalDateTime timeStar , LocalDateTime timeEnd) {
-		List<Salles> salles = sallesRepository.findAvailableSalles(date , timeStar , timeEnd);
-	    return  salles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
+	public List<SallesDTO> availableSalles(Date date, LocalDateTime timeStar, LocalDateTime timeEnd) {
+		List<Salles> salles = sallesRepository.findAvailableSalles(date, timeStar, timeEnd);
+		return salles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<SallesDTO> availableSallesModif(Date date , LocalDateTime timeStar , LocalDateTime timeEnd, Long id) {
-		List<Salles> salles = sallesRepository.findAvailableSallesModif(date , timeStar , timeEnd,id);
-	    return  salles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
+	public List<SallesDTO> availableSallesModif(Date date, LocalDateTime timeStar, LocalDateTime timeEnd, Long id) {
+		List<Salles> salles = sallesRepository.findAvailableSallesModif(date, timeStar, timeEnd, id);
+		return salles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<ListAttributAUTO> gettAllSallesApi() {
 		List<Salles> salles = sallesRepository.findAllWithStatus();
-        return  salles.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
+		return salles.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public SallesDTO getSalleById(Long id) {
-		Salles salle = sallesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Salle","id",id));
-        return  mapToDTO(salle);
+		Salles salle = sallesRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Salle", "id", id));
+		return mapToDTO(salle);
 	}
 
 	@Override
 	public SallesDTO addSalle(SallesDTO sallesDTO) {
 		Salles salles = new Salles();
 
-		ListAttribut typeSalle = listAttributRepository.findByIdAndStatut(sallesDTO.getIdTypeSalle() , GlobalConstant.STATUT_ACTIF)
-				.orElseThrow(() -> new ResourceNotFoundException("Type Salle","id",sallesDTO.getIdTypeSalle()));
+		ListAttribut typeSalle = listAttributRepository
+				.findByIdAndStatut(sallesDTO.getIdTypeSalle(), GlobalConstant.STATUT_ACTIF)
+				.orElseThrow(() -> new ResourceNotFoundException("Type Salle", "id", sallesDTO.getIdTypeSalle()));
 
 		salles.setDateCreation(new Date());
 		salles.setStatut(sallesDTO.getStatut());
@@ -72,56 +72,57 @@ public class SallesServicesImp implements InSallesServices{
 		salles.setMaxEffective(sallesDTO.getMaxEffective());
 		salles.setTypeSalle(typeSalle);
 		Salles rl = sallesRepository.save(salles);
-	    return mapToDTO(rl);
+		return mapToDTO(rl);
 	}
 
 	@Override
-	public void deleteSalle(Long id) {
-		Salles role = sallesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Salle", "id", id));
-		role.setDateDesactivation(new Date());
-		role.setStatut(GlobalConstant.STATUT_DELETE);
-		sallesRepository.save(role);
+	public void deleteSalle(Long id, String motif) {
+		Salles salle = sallesRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Salle", "id", id));
+		salle.setDateDesactivation(new Date());
+		salle.setStatut(GlobalConstant.STATUT_DELETE);
+		salle.setMotif(motif);
+		sallesRepository.save(salle);
 
 	}
 
 	@Override
 	public SallesDTO updateSalle(Long id, SallesDTO sallesDTO) {
-		Salles salles = sallesRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Salle", "id", id));
-		ListAttribut typeSalleAttribut = listAttributRepository.findByIdAndStatut(sallesDTO.getIdTypeSalle() , GlobalConstant.STATUT_ACTIF).orElseThrow(()-> new ResourceNotFoundException("Type de salle", "id", sallesDTO.getIdTypeSalle()));
+		Salles salles = sallesRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Salle", "id", id));
+		ListAttribut typeSalleAttribut = listAttributRepository
+				.findByIdAndStatut(sallesDTO.getIdTypeSalle(), GlobalConstant.STATUT_ACTIF)
+				.orElseThrow(() -> new ResourceNotFoundException("Type de salle", "id", sallesDTO.getIdTypeSalle()));
 		salles.setNom(sallesDTO.getNom());
 		salles.setStatut(sallesDTO.getStatut());
 		salles.setDateModification(new Date());
 		salles.setMaxEffective(sallesDTO.getMaxEffective());
-		salles.setTypeSalle(typeSalleAttribut);		
+		salles.setTypeSalle(typeSalleAttribut);
 		Salles sl = sallesRepository.save(salles);
 		return mapToDTO(sl);
 	}
 
-	private SallesDTO mapToDTO(Salles x)
-    {
+	private SallesDTO mapToDTO(Salles x) {
 		SallesDTO dto = new SallesDTO();
-        dto.setId(x.getId());
-        dto.setNom(x.getNom());
-        dto.setMaxEffective(x.getMaxEffective());
+		dto.setId(x.getId());
+		dto.setNom(x.getNom());
+		dto.setMaxEffective(x.getMaxEffective());
 
-        dto.setIdTypeSalle(x.getTypeSalle().getId());
-        dto.setLibelleTypeSalle(x.getTypeSalle().getLibelle());
-        dto.setStatut(x.getStatut());
-        dto.setDateCreation(x.getDateCreation());
-        dto.setDateDesactivation(x.getDateDesactivation());
-        dto.setDateModification(x.getDateModification());
-        return dto;
-    }
+		dto.setIdTypeSalle(x.getTypeSalle().getId());
+		dto.setLibelleTypeSalle(x.getTypeSalle().getLibelle());
+		dto.setStatut(x.getStatut());
+		dto.setDateCreation(x.getDateCreation());
+		dto.setDateDesactivation(x.getDateDesactivation());
+		dto.setDateModification(x.getDateModification());
+		return dto;
+	}
 
-	private ListAttributAUTO mapToList(Salles x)
-    {
+	private ListAttributAUTO mapToList(Salles x) {
 		ListAttributAUTO dto = new ListAttributAUTO();
-        dto.setId(x.getId());
-        dto.setLibelle(x.getNom());
+		dto.setId(x.getId());
+		dto.setLibelle(x.getNom());
 
-        return dto;
-    }
-
-
+		return dto;
+	}
 
 }
