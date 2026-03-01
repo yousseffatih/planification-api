@@ -65,7 +65,7 @@ public class ModulesController {
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Module ajoutée.", "success"));
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public ResponseEntity<?> deleteClasse(@PathVariable Long id, @RequestBody Map<String, String> motif) {
         if (motif.get("motif") == null || motif.get("motif").isEmpty()) {
             return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)

@@ -16,38 +16,40 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfesseurDTO {
-	
-	 	private Long id;
-	 
-	    @NotNull(message = "Nom est obligatoire!")
-		@NotEmpty(message = "Nom est obligatoire!")
-	    private String nom;
 
-	    @NotNull(message = "Prénom est obligatoire!")
-		@NotEmpty(message = "Prénom est obligatoire!")
-	    private String  prenom;
-	    
-	    @NotNull(message = "Email est obligatoire!")
-		@NotEmpty(message = "Email est obligatoire!")
-	    private String email;
-	    
-	    @NotNull(message = "Numéro est obligatoire!")
-		@NotEmpty(message = "Numéro est obligatoire!")
-	    private String numeroTele;
+	private Long id;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateCreation;
+	@NotNull(message = "Nom est obligatoire!")
+	@NotEmpty(message = "Nom est obligatoire!")
+	private String nom;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateDesactivation;
+	@NotNull(message = "Prénom est obligatoire!")
+	@NotEmpty(message = "Prénom est obligatoire!")
+	private String prenom;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateModification;
+	@NotNull(message = "Email est obligatoire!")
+	@NotEmpty(message = "Email est obligatoire!")
+	private String email;
 
-	    private String statut;
-	    
-	    @NotNull(message = "Type de professeur est obligatoire!")
-	    private Long idTypeProf;
+	@NotNull(message = "Numéro est obligatoire!")
+	@NotEmpty(message = "Numéro est obligatoire!")
+	private String numeroTele;
 
-		private String libelleTypeProf;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateCreation;
+
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateDesactivation;
+
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateModification;
+
+	private String statut;
+
+	private String libelle;
+
+	@NotNull(message = "Type de professeur est obligatoire!")
+	private Long idTypeProf;
+
+	private String libelleTypeProf;
 }

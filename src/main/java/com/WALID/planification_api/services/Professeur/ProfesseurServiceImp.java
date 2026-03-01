@@ -98,6 +98,7 @@ public class ProfesseurServiceImp implements InProfesseurServices {
         dto.setId(x.getId());
         dto.setNom(x.getNom());
         dto.setPrenom(x.getPrenom());
+        dto.setLibelle(x.getNom() + " " + x.getPrenom());
         dto.setEmail(x.getEmail());
         dto.setNumeroTele(x.getNumeroTele());
         dto.setIdTypeProf(x.getTypeProf().getId());

@@ -47,7 +47,8 @@ public class SecurityConfig {
 				.authorizeHttpRequests(request -> request
 						.requestMatchers("/api/auth/**").permitAll()
 						.requestMatchers("/api/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-						.requestMatchers("/api/roles/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+						.requestMatchers("/api/roles/**").permitAll()
+						// .hasAnyRole("ADMIN", "SUPER_ADMIN")
 						.requestMatchers("/api/planification/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
 						.requestMatchers("/api/salles/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
 						.requestMatchers("/api/classes/**").hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")

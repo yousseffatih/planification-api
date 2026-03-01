@@ -1,6 +1,5 @@
 package com.WALID.planification_api.entities;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,16 +23,18 @@ public class Professeur extends ClassEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String nom;
-	
+
 	private String prenom;
-	
+
 	private String email;
-	
+
 	private String numeroTele;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="TYPE_PROF_ID")
+
+	private String libelle;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "TYPE_PROF_ID")
 	private ListAttribut typeProf;
 }

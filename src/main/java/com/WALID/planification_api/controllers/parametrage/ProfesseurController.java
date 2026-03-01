@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.WALID.planification_api.playload.MessageResponse;
@@ -60,8 +59,9 @@ public class ProfesseurController {
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Prof ajoutée.", "success"));
     }
 
-    @GetMapping("/delete/{id}")
-    public ResponseEntity<?> deleteClasse(@PathVariable Long id, @RequestParam Map<String, String> motif) {
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> deleteClasse(@PathVariable Long id, @RequestBody Map<String, String> motif) {
+        System.out.println("motif : " + motif.get("motif"));
         if (motif.get("motif") == null || motif.get("motif").isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Motif manquant.", "error"));
         }

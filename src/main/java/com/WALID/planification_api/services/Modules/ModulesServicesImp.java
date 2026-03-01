@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.entities.Modules;
-import com.WALID.planification_api.entities.Salles;
 import com.WALID.planification_api.playload.ResourceNotFoundException;
 import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.ModulesDTO;
@@ -46,7 +45,8 @@ public class ModulesServicesImp implements InModulesServices {
 
 		module.setDateCreation(new Date());
 		module.setStatut(GlobalConstant.STATUT_ACTIF);
-		module.setNom(moduleDto.getNom());
+		module.setNom(GlobalConstant.formatName(moduleDto.getNom()));
+		module.setLibelle(moduleDto.getNom());
 		Modules mdl = modulesRepository.save(module);
 		return mapToDTO(mdl);
 	}

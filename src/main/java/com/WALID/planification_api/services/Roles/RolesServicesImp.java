@@ -13,23 +13,23 @@ import com.WALID.planification_api.playload.ResourceNotFoundException;
 import com.WALID.planification_api.playload.DTO.RolesDTO;
 import com.WALID.planification_api.repositories.Parametrage.RolesRepository;
 
-
 @Service
-public class RolesServicesImp implements InRolesServices{
+public class RolesServicesImp implements InRolesServices {
 
 	@Autowired
 	private RolesRepository rolesRepository;
-	
+
 	@Override
 	public List<RolesDTO> getAllRoles() {
 		List<Roles> roles = rolesRepository.findAllWithStatus();
-        return  roles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
+		return roles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public RolesDTO getRoleById(Long id) {
-		Roles role = rolesRepository.findByIdStatut(id).orElseThrow(() -> new ResourceNotFoundException("Role","id",id));
-        return  mapToDTO(role);
+		Roles role = rolesRepository.findByIdStatut(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
+		return mapToDTO(role);
 	}
 
 	@Override
@@ -38,43 +38,45 @@ public class RolesServicesImp implements InRolesServices{
 
 		role.setDateCreation(new Date());
 		role.setStatut(GlobalConstant.STATUT_ACTIF);
-		role.setNom(rolesDTO.getNom());
+		role.setNom(GlobalConstant.formatName(rolesDTO.getNom()));
+		role.setLibelle(rolesDTO.getNom());
 		Roles rl = rolesRepository.save(role);
-	    return mapToDTO(rl);
+		return mapToDTO(rl);
 	}
 
 	@Override
 	public void deleteRole(Long id) {
-		Roles role = rolesRepository.findByIdStatut(id).orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
+		Roles role = rolesRepository.findByIdStatut(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
 		role.setDateDesactivation(new Date());
 		role.setStatut(GlobalConstant.STATUT_DELETE);
-        rolesRepository.save(role);
+		rolesRepository.save(role);
 
 	}
 
 	@Override
 	public RolesDTO updateRole(Long id, RolesDTO modulesDTO) {
-		Roles role = rolesRepository.findByIdStatut(id).orElseThrow(()-> new ResourceNotFoundException("Role", "id", id));
+		Roles role = rolesRepository.findByIdStatut(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
 
 		role.setNom(modulesDTO.getNom());
-    	//classe.setStatut(classesDTO.getStatut());
+		// classe.setStatut(classesDTO.getStatut());
 		role.setDateModification(new Date());
 
 		Roles rl = rolesRepository.save(role);
 		return mapToDTO(rl);
 	}
 
-	private RolesDTO mapToDTO(Roles x)
-    {
+	private RolesDTO mapToDTO(Roles x) {
 		RolesDTO dto = new RolesDTO();
-        dto.setId(x.getId());
-        dto.setNom(x.getNom());
+		dto.setId(x.getId());
+		dto.setNom(x.getNom());
 
-        dto.setStatut(x.getStatut());
-        dto.setDateCreation(x.getDateCreation());
-        dto.setDateDesactivation(x.getDateDesactivation());
-        dto.setDateModification(x.getDateModification());
-        return dto;
-    }
+		dto.setStatut(x.getStatut());
+		dto.setDateCreation(x.getDateCreation());
+		dto.setDateDesactivation(x.getDateDesactivation());
+		dto.setDateModification(x.getDateModification());
+		return dto;
+	}
 
 }

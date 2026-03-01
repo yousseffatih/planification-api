@@ -67,7 +67,8 @@ public class CumpusServices implements InCumpusService {
 
 		cumpus.setDateCreation(new Date());
 		cumpus.setStatut(GlobalConstant.STATUT_ACTIF);
-		cumpus.setNom(cumpusDTO.getNom());
+		cumpus.setLibelle(cumpusDTO.getNom());
+		cumpus.setNom(GlobalConstant.formatName(cumpusDTO.getNom()));
 		cumpus.setVille(ville);
 		cumpusRepository.save(cumpus);
 		return mapToDTO(cumpus);
