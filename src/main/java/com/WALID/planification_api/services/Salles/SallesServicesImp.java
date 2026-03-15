@@ -106,6 +106,9 @@ public class SallesServicesImp implements InSallesServices {
 		SallesDTO dto = new SallesDTO();
 		dto.setId(x.getId());
 		dto.setNom(x.getNom());
+		if (x.getLibelle() != null) {
+			dto.setLibelle(x.getLibelle());
+		}
 		dto.setMaxEffective(x.getMaxEffective());
 
 		dto.setIdTypeSalle(x.getTypeSalle().getId());

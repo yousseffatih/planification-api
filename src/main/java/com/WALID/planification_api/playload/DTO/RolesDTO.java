@@ -16,11 +16,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RolesDTO {
-	private Long id;
+    private Long id;
 
     @NotNull(message = "Nom est obligatoire!")
-	@NotEmpty(message = "Nom est obligatoire!")
+    @NotEmpty(message = "Nom est obligatoire!")
     private String nom;
+
+    private String libelle;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dateCreation;

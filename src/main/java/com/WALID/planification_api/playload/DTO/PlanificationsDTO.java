@@ -19,64 +19,66 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PlanificationsDTO {
 
-	    private Long id;
+	private Long id;
 
-	    @NotNull(message = "Nom est obligatoire!")
-		@NotEmpty(message = "Nom est obligatoire!")
-	    private String nom;
+	@NotNull(message = "Nom est obligatoire!")
+	@NotEmpty(message = "Nom est obligatoire!")
+	private String nom;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateCreation;
+	private String libelle;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateDesactivation;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateCreation;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateModification;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateDesactivation;
 
-	    private String statut;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateModification;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    @NotNull(message = "Le nom du professeur est obligatoire !")
-		private Date datePlanification;
+	private String statut;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-	    @NotNull(message = "L'heure de debut est obligatoire !")
-		private LocalDateTime timeDebut;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@NotNull(message = "Le nom du professeur est obligatoire !")
+	private Date datePlanification;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-	    @NotNull(message = "L'heure de fin est obligatoire !")
-		private LocalDateTime timeFin;
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+	@NotNull(message = "L'heure de debut est obligatoire !")
+	private LocalDateTime timeDebut;
 
-		private String prof;
-	    
-	    @NotNull(message = "Prof est obligatoire !")
-		private Long idProfesseur;
-	    private String libelleProfeseur;
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+	@NotNull(message = "L'heure de fin est obligatoire !")
+	private LocalDateTime timeFin;
 
-	    @NotNull(message = "Module est obligatoire !")
-		private Long idModule;
-		private String libelleModule;
+	private String prof;
 
-		@NotNull(message = "Salle est obligatoire !")
-		private Long idSalle;
-		private String libelleSalle;
-		
-		@NotNull(message = "Utilisateur est obligatoire !")
-		private Long idUser;
-		private String libelleUser;
-		
-		@NotNull(message = "Type Planification est obligatoire !")
-		private Long idTypePlanification;
-		private String libelleTypePlanification;
-		
-		private String description;
-		
-		@NotNull(message = "Cumpus est obligatoire !")
-		private Long idCumpus;
-		private String libelleCumpus;
+	@NotNull(message = "Prof est obligatoire !")
+	private Long idProfesseur;
+	private String libelleProfeseur;
 
-		@NotNull(message = "Les classes est obligatoire !")
-		@NotEmpty(message = "Au moins une classe est obligatoire !")
-		private List<Long> idsClasses;
+	@NotNull(message = "Module est obligatoire !")
+	private Long idModule;
+	private String libelleModule;
+
+	@NotNull(message = "Salle est obligatoire !")
+	private Long idSalle;
+	private String libelleSalle;
+
+	@NotNull(message = "Utilisateur est obligatoire !")
+	private Long idUser;
+	private String libelleUser;
+
+	@NotNull(message = "Type Planification est obligatoire !")
+	private Long idTypePlanification;
+	private String libelleTypePlanification;
+
+	private String description;
+
+	@NotNull(message = "Cumpus est obligatoire !")
+	private Long idCumpus;
+	private String libelleCumpus;
+
+	@NotNull(message = "Les classes est obligatoire !")
+	@NotEmpty(message = "Au moins une classe est obligatoire !")
+	private List<Long> idsClasses;
 }

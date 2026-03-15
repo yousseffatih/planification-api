@@ -84,6 +84,9 @@ public class ClassesServiceImp implements InClassesServices {
         dto.setId(x.getId());
         dto.setLibelle(x.getLibelle());
         dto.setNom(x.getNom());
+        if (x.getLibelle() != null) {
+            dto.setLibelle(x.getLibelle());
+        }
         dto.setAnnuerScolaire(x.getAnnuerScolaire());
         dto.setNomberEff(x.getNomberEff());
 

@@ -22,24 +22,23 @@ public class SallesDTO {
 	@NotEmpty(message = "Nom est obligatoire!")
 	private String nom;
 
+	private String libelle;
+
 	@NotNull(message = "Le nombre d'effectifs est obligatoire!")
 	private Integer maxEffective;
 
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateCreation;
 
 	@JsonFormat(pattern = "dd/MM/yyyy")
-    private Date dateCreation;
+	private Date dateDesactivation;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date dateDesactivation;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateModification;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date dateModification;
-
-    private String statut;
-
+	private String statut;
 
 	private Long idTypeSalle;
-
 
 	private String libelleTypeSalle;
 }

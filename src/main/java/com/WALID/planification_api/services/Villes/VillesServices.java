@@ -45,8 +45,8 @@ public class VillesServices implements InVillesServices {
 
 		ville.setDateCreation(new Date());
 		ville.setStatut(GlobalConstant.STATUT_ACTIF);
-		ville.setNom(villesDTO.getNom());
-		ville.setLibelle(GlobalConstant.formatName(villesDTO.getNom()));
+		ville.setLibelle(villesDTO.getNom());
+		ville.setNom(GlobalConstant.formatName(villesDTO.getNom()));
 		villeRepository.save(ville);
 		return mapToDTO(ville);
 	}
@@ -68,8 +68,8 @@ public class VillesServices implements InVillesServices {
 		ville.setDateModification(new Date());
 		ville.setStatut(villesDTO.getStatut());
 		ville.setMotif(villesDTO.getMotif());
-		ville.setNom(villesDTO.getNom());
-		ville.setLibelle(GlobalConstant.formatName(villesDTO.getNom()));
+		ville.setLibelle(villesDTO.getNom());
+		ville.setNom(GlobalConstant.formatName(villesDTO.getNom()));
 		villeRepository.save(ville);
 		return mapToDTO(ville);
 	}
@@ -78,6 +78,9 @@ public class VillesServices implements InVillesServices {
 		VillesDTO dto = new VillesDTO();
 		dto.setId(x.getId());
 		dto.setNom(x.getNom());
+		if (x.getLibelle() != null) {
+			dto.setLibelle(x.getLibelle());
+		}
 		dto.setMotif(x.getMotif());
 
 		dto.setStatut(x.getStatut());

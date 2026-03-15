@@ -104,6 +104,9 @@ public class CumpusServices implements InCumpusService {
 		CumpusDTO dto = new CumpusDTO();
 		dto.setId(x.getId());
 		dto.setNom(x.getNom());
+		Optional.ofNullable(x.getLibelle()).ifPresent(ville -> {
+			dto.setLibelleVille(ville);
+		});
 		Optional.ofNullable(x.getVille())
 				.ifPresent(ville -> {
 					dto.setIdVille(ville.getId());

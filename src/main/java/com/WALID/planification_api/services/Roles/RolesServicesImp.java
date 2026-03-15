@@ -39,7 +39,10 @@ public class RolesServicesImp implements InRolesServices {
 		role.setDateCreation(new Date());
 		role.setStatut(GlobalConstant.STATUT_ACTIF);
 		role.setNom(GlobalConstant.formatName(rolesDTO.getNom()));
-		role.setLibelle(rolesDTO.getNom());
+		if (rolesDTO.getLibelle() != null) {
+			role.setLibelle(rolesDTO.getLibelle());
+		}
+		role.setLibelle(rolesDTO.getLibelle());
 		Roles rl = rolesRepository.save(role);
 		return mapToDTO(rl);
 	}

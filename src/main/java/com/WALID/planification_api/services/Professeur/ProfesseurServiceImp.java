@@ -57,6 +57,7 @@ public class ProfesseurServiceImp implements InProfesseurServices {
         prof.setNumeroTele(professeurDTO.getNumeroTele());
         prof.setEmail(professeurDTO.getEmail());
         // prof.setStatut(professeurDTO.getStatut());
+
         prof.setNom(professeurDTO.getNom());
         prof.setPrenom(professeurDTO.getPrenom());
         prof.setTypeProf(typeProfAttribut);
@@ -97,6 +98,9 @@ public class ProfesseurServiceImp implements InProfesseurServices {
         ProfesseurDTO dto = new ProfesseurDTO();
         dto.setId(x.getId());
         dto.setNom(x.getNom());
+        if (x.getLibelle() != null) {
+            dto.setLibelle(x.getLibelle());
+        }
         dto.setPrenom(x.getPrenom());
         dto.setLibelle(x.getNom() + " " + x.getPrenom());
         dto.setEmail(x.getEmail());
