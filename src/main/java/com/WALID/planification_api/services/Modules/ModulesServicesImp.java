@@ -79,6 +79,9 @@ public class ModulesServicesImp implements InModulesServices {
 		ModulesDTO dto = new ModulesDTO();
 		dto.setId(x.getId());
 		dto.setNom(x.getNom());
+		if (x.getLibelle() != null) {
+			dto.setLibelle(x.getLibelle());
+		}
 
 		dto.setStatut(x.getStatut());
 		dto.setDateCreation(x.getDateCreation());

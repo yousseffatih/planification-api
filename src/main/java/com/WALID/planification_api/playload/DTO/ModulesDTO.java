@@ -17,21 +17,23 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ModulesDTO {
 
-	    private Long id;
+	private Long id;
 
-	    @NotNull(message = "Nom est obligatoire!")
-		@NotEmpty(message = "Nom est obligatoire!")
-	    private String nom;
+	@NotNull(message = "Nom est obligatoire!")
+	@NotEmpty(message = "Nom est obligatoire!")
+	private String nom;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateCreation;
+	private String libelle;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateDesactivation;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateCreation;
 
-	    @JsonFormat(pattern = "dd/MM/yyyy")
-	    private Date dateModification;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateDesactivation;
 
-	    private String statut;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date dateModification;
+
+	private String statut;
 
 }
