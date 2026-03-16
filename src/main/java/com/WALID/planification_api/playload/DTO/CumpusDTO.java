@@ -17,17 +17,19 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CumpusDTO {
-	
-	private Long id;
-	
-	@NotNull(message = "Nom est obligatoire!")
-	@NotEmpty(message = "Nom est obligatoire!")
+
+    private Long id;
+
+    @NotNull(message = "Nom est obligatoire!")
+    @NotEmpty(message = "Nom est obligatoire!")
     @Size(max = 20, message = "Le nom ne peut pas dépasser 20 caractères")
     private String nom;
-	
-	@NotNull(message = "Ville est obligatoire!")
-	private Long idVille;
-	private String libelleVille;
+
+    private String libelle;
+
+    @NotNull(message = "Ville est obligatoire!")
+    private Long idVille;
+    private String libelleVille;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dateCreation;
@@ -39,5 +41,5 @@ public class CumpusDTO {
     private Date dateModification;
 
     private String statut;
-    
+
 }

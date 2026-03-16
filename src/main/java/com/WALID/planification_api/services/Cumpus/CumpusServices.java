@@ -106,7 +106,7 @@ public class CumpusServices implements InCumpusService {
 		dto.setId(x.getId());
 		dto.setNom(x.getNom());
 		Optional.ofNullable(x.getLibelle()).ifPresent(ville -> {
-			dto.setLibelleVille(ville);
+			dto.setLibelle(ville);
 		});
 		Optional.ofNullable(x.getVille())
 				.ifPresent(ville -> {
