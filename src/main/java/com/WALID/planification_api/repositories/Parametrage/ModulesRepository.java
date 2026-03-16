@@ -9,36 +9,36 @@ import org.springframework.data.repository.query.Param;
 
 import com.WALID.planification_api.entities.Modules;
 
+public interface ModulesRepository extends JpaRepository<Modules, Long> {
 
-public interface ModulesRepository extends JpaRepository<Modules,Long>{
+	@Query("select m"
+			+ " from Modules m "
+			+ " where m.statut in ('actif', 'inActif') "
+			+ " order by m.dateCreation ")
+	List<Modules> findAllWithStatus();
 
-	   @Query("select m"
-				+ " from Modules m "
-				+ " where m.statut in ('actif', 'inActif') "
-	            + " order by m.dateCreation ")
-		List<Modules> findAllWithStatus();
-	   
-	   @Query("select m"
-				+ " from Modules m "
-				+ " where m.statut in ('actif') "
-	            + " order by m.dateCreation ")
-		List<Modules> findAllWithStatusListApi();
+	@Query("select m"
+			+ " from Modules m "
+			+ " where m.statut in ('actif') "
+			+ " order by m.dateCreation ")
+	List<Modules> findAllWithStatusListApi();
 
-	    @Query("select m"
-				+ " from Modules m "
-				+ " where m.statut in ('actif','inActif')"
-				+ " and m.id = :val ")
-		Optional<Modules> findByIdStatut(@Param("val") Long val);
+	@Query("select m"
+			+ " from Modules m "
+			+ " where m.statut in ('actif','inActif')"
+			+ " and m.id = :val ")
+	Optional<Modules> findByIdStatut(@Param("val") Long val);
 
-	    boolean existsByNomAndStatut(String nom, String statut);
-	    boolean existsByIdAndStatut(Long id, String statut);
+	boolean existsByNomAndStatutNot(String nom, String statut);
 
-	    @Query("select "
-				+ " case when count(m)> 0 then true "
-				+ " else false end "
-				+ " from Modules m "
-				+ " where lower(m.nom) like lower(:val) "
-				+ " and m.statut in('actif', 'inActif') "
-				+ " and m.id <> :id ")
-		boolean existsByNomModif(@Param("val") String val, @Param("id") Long id);
+	boolean existsByIdAndStatut(Long id, String statut);
+
+	@Query("select "
+			+ " case when count(m)> 0 then true "
+			+ " else false end "
+			+ " from Modules m "
+			+ " where lower(m.nom) like lower(:val) "
+			+ " and m.statut in('actif', 'inActif') "
+			+ " and m.id <> :id ")
+	boolean existsByNomModif(@Param("val") String val, @Param("id") Long id);
 }

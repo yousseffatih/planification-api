@@ -103,7 +103,7 @@ public class SallesController {
 
 	@PostMapping("")
 	public ResponseEntity<?> addClasse(@Valid @RequestBody SallesDTO sallesDTO) {
-		boolean ifNomExist = sallesRepository.existsByNom(sallesDTO.getNom());
+		boolean ifNomExist = sallesRepository.existsByNomAndStatutNot(sallesDTO.getNom(), GlobalConstant.STATUT_DELETE);
 		if (ifNomExist) {
 			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
 					.body(new MessageResponse("Le nom existe déjà !", "warning"));

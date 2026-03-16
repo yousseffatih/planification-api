@@ -18,6 +18,7 @@ import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.playload.MessageResponse;
 import com.WALID.planification_api.playload.DTO.CumpusDTO;
 import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
+import com.WALID.planification_api.repositories.Parametrage.CumpusRepository;
 import com.WALID.planification_api.services.Cumpus.InCumpusService;
 
 import jakarta.validation.Valid;
@@ -30,6 +31,9 @@ public class CumpusController {
 
     @Autowired
     private InCumpusService cumpusService;
+
+    @Autowired
+    private CumpusRepository cumpusRepository;
 
     @GetMapping("")
     public ResponseEntity<List<CumpusDTO>> getAllResponseEntity() {
@@ -53,6 +57,11 @@ public class CumpusController {
     @PostMapping("")
     public ResponseEntity<?> addClasse(@Valid @RequestBody CumpusDTO cumpusDTO) {
 
+        boolean ifNomExist = cumpusRepository.existsByNomAndStatut(cumpusDTO.getNom(), GlobalConstant.STATUT_DELETE);
+        if (ifNomExist) {
+            return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+                    .body(new MessageResponse("Le nom existe déjà !", "warning"));
+        }
         cumpusService.addCumpus(cumpusDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Cumpus ajoutée.", "success"));
     }

@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.playload.MessageResponse;
 import com.WALID.planification_api.playload.DTO.ListAttributAUTO;
 import com.WALID.planification_api.playload.DTO.VillesDTO;
+import com.WALID.planification_api.repositories.Parametrage.VillesRepository;
 import com.WALID.planification_api.services.Villes.InVillesServices;
 
 import jakarta.validation.Valid;
@@ -30,6 +32,9 @@ public class VillesController {
 
     @Autowired
     private InVillesServices villesServices;
+
+    @Autowired
+    private VillesRepository villesRepository;
 
     @GetMapping("")
     public ResponseEntity<List<VillesDTO>> getAllResponseEntity() {
@@ -45,13 +50,18 @@ public class VillesController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VillesDTO> getClasseById(@PathVariable Long id) {
-
         VillesDTO villeDTO = villesServices.getVilleById(id);
         return new ResponseEntity<>(villeDTO, HttpStatus.OK);
     }
 
     @PostMapping("")
     public ResponseEntity<?> addClasse(@Valid @RequestBody VillesDTO villesDTO) {
+
+        boolean ifExist = villesRepository.existsByNomAndStatutNot(villesDTO.getNom(), GlobalConstant.STATUT_ACTIF);
+        if (ifExist) {
+            return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+                    .body(new MessageResponse("Le nom existe déjà !", "warning"));
+        }
 
         villesServices.addVille(villesDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Ville ajoutée.", "success"));

@@ -11,33 +11,34 @@ import org.springframework.data.repository.query.Param;
 
 import com.WALID.planification_api.entities.Salles;
 
-
-public interface SallesRepository extends JpaRepository<Salles,Long>{
+public interface SallesRepository extends JpaRepository<Salles, Long> {
 
 	@Query("select s"
 			+ " from Salles s "
 			+ " where s.statut in ('actif', 'inActif') "
-            + " order by s.dateCreation ")
+			+ " order by s.dateCreation ")
 	List<Salles> findAllWithStatus();
-	
+
 	@Query("select s"
 			+ " from Salles s "
 			+ " where s.statut in ('actif') "
-            + " order by s.dateCreation ")
+			+ " order by s.dateCreation ")
 	List<Salles> getSallesListApi();
 
+	Optional<Salles> findByIdAndStatut(Long id, String statut);
 
-    Optional<Salles> findByIdAndStatut(Long id , String statut);
-    @Override
+	@Override
 	Optional<Salles> findById(Long id);
-    boolean existsByNom(String nom);
-    boolean existsByNomAndStatut(String nom, String statut);
-    boolean existsByIdAndStatut(Long id, String statut);
-    
-    int countSallesByStatut(String statut);
 
+	boolean existsByNomAndStatut(String nom, String statut);
 
-    @Query("select "
+	boolean existsByIdAndStatut(Long id, String statut);
+
+	int countSallesByStatut(String statut);
+
+	boolean existsByNomAndStatutNot(String nom, String status);
+
+	@Query("select "
 			+ " case when count(s)> 0 then true "
 			+ " else false end "
 			+ " from Salles s "
@@ -46,19 +47,20 @@ public interface SallesRepository extends JpaRepository<Salles,Long>{
 			+ " and s.id <> :id ")
 	boolean existsByNomModif(@Param("val") String val, @Param("id") Long id);
 
-    @Query("SELECT s FROM Salles s WHERE s.id NOT IN (" +
-            "SELECT p.salle.id FROM Planifications p " +
-            "WHERE p.datePlanification = :date " +
-            "AND ((p.timeDebut BETWEEN :timeStart AND :timeEnd) OR (p.timeFin BETWEEN :timeStart AND :timeEnd)))")
-     List<Salles> findAvailableSalles(@Param("date") Date date ,  @Param("timeStart") LocalDateTime timeStart, @Param("timeEnd") LocalDateTime timeEnd);
+	@Query("SELECT s FROM Salles s WHERE s.id NOT IN (" +
+			"SELECT p.salle.id FROM Planifications p " +
+			"WHERE p.datePlanification = :date " +
+			"AND ((p.timeDebut BETWEEN :timeStart AND :timeEnd) OR (p.timeFin BETWEEN :timeStart AND :timeEnd)))")
+	List<Salles> findAvailableSalles(@Param("date") Date date, @Param("timeStart") LocalDateTime timeStart,
+			@Param("timeEnd") LocalDateTime timeEnd);
 
-    @Query("SELECT s FROM Salles s WHERE s.id NOT IN (" +
-    	       "SELECT p.salle.id FROM Planifications p " +
-    	       "WHERE p.datePlanification = :date " +
-    	       "AND ((p.timeDebut BETWEEN :timeStart AND :timeEnd) OR (p.timeFin BETWEEN :timeStart AND :timeEnd))" +
-    	       "AND p.salle.id <> :reservedSalleId) ")
-     List<Salles> findAvailableSallesModif(@Param("date") Date date ,
-    		 @Param("timeStart") LocalDateTime timeStart,
-    		 @Param("timeEnd") LocalDateTime timeEnd,
-    		 @Param("reservedSalleId") Long reservedSalleId);
+	@Query("SELECT s FROM Salles s WHERE s.id NOT IN (" +
+			"SELECT p.salle.id FROM Planifications p " +
+			"WHERE p.datePlanification = :date " +
+			"AND ((p.timeDebut BETWEEN :timeStart AND :timeEnd) OR (p.timeFin BETWEEN :timeStart AND :timeEnd))" +
+			"AND p.salle.id <> :reservedSalleId) ")
+	List<Salles> findAvailableSallesModif(@Param("date") Date date,
+			@Param("timeStart") LocalDateTime timeStart,
+			@Param("timeEnd") LocalDateTime timeEnd,
+			@Param("reservedSalleId") Long reservedSalleId);
 }

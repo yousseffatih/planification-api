@@ -45,16 +45,6 @@ public class ProfesseurController {
 
     @PostMapping("")
     public ResponseEntity<?> addClasse(@Valid @RequestBody ProfesseurDTO classesDTO) {
-        // boolean ifNomExist =
-        // professeurServices.existsByNomAndStatut(classesDTO.getNom(),
-        // GlobalConstant.STATUT_ACTIF);
-        // if(ifNomExist)
-        // {
-        // return
-        // ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR).body(new
-        // MessageResponse("Le nom existe déjà !", "warning") );
-        // }
-
         professeurServices.addProfesseur(classesDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Prof ajoutée.", "success"));
     }

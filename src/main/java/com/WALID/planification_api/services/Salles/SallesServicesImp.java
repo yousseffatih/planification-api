@@ -67,7 +67,8 @@ public class SallesServicesImp implements InSallesServices {
 
 		salles.setDateCreation(new Date());
 		salles.setStatut(sallesDTO.getStatut());
-		salles.setNom(sallesDTO.getNom());
+		salles.setNom(GlobalConstant.formatName(sallesDTO.getNom()));
+		salles.setLibelle(salles.getLibelle());
 		salles.setStatut(GlobalConstant.STATUT_ACTIF);
 		salles.setMaxEffective(sallesDTO.getMaxEffective());
 		salles.setTypeSalle(typeSalle);
@@ -93,7 +94,8 @@ public class SallesServicesImp implements InSallesServices {
 		ListAttribut typeSalleAttribut = listAttributRepository
 				.findByIdAndStatut(sallesDTO.getIdTypeSalle(), GlobalConstant.STATUT_ACTIF)
 				.orElseThrow(() -> new ResourceNotFoundException("Type de salle", "id", sallesDTO.getIdTypeSalle()));
-		salles.setNom(sallesDTO.getNom());
+		salles.setNom(GlobalConstant.formatName(sallesDTO.getNom()));
+		salles.setLibelle(salles.getLibelle());
 		salles.setStatut(sallesDTO.getStatut());
 		salles.setDateModification(new Date());
 		salles.setMaxEffective(sallesDTO.getMaxEffective());
