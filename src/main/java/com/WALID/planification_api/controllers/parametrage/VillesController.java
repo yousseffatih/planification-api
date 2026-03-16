@@ -67,8 +67,8 @@ public class VillesController {
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Ville ajoutée.", "success"));
     }
 
-    @GetMapping("/delete/{id}")
-    public ResponseEntity<?> deleteClasse(@PathVariable Long id, @RequestParam Map<String, String> motif) {
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> deleteClasse(@PathVariable Long id, @RequestBody Map<String, String> motif) {
         if (motif.get("motif") == null || motif.get("motif").isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Motif manquant.", "error"));
         }
