@@ -88,7 +88,7 @@ public class UserController {
 	}
 
 	@PostMapping("/delete/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable Long id, @RequestParam Map<String, String> motif) {
+	public ResponseEntity<?> deleteUser(@PathVariable Long id, @RequestBody Map<String, String> motif) {
 		if (motif.get("motif") == null || motif.get("motif").isEmpty()) {
 			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
 					.body(new MessageResponse("Motif manquant.", "warning"));
