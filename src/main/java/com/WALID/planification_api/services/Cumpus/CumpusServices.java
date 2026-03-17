@@ -34,8 +34,8 @@ public class CumpusServices implements InCumpusService {
 
 		Cumpus addCumpus = new Cumpus();
 		addCumpus.setId(0L);
-		addCumpus.setNom("TOUS LES CUMPUS");
-
+		addCumpus.setNom("tous_les_cumpus");
+		addCumpus.setLibelle("TOUS LES CUMPUS");
 		cumpus.add(addCumpus);
 
 		return cumpus.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
