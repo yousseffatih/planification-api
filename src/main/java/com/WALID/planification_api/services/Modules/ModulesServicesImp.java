@@ -67,7 +67,8 @@ public class ModulesServicesImp implements InModulesServices {
 		Modules module = modulesRepository.findByIdStatut(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));
 
-		module.setNom(modulesDTO.getNom());
+		module.setNom(GlobalConstant.formatName(modulesDTO.getNom()));
+		module.setLibelle(modulesDTO.getNom());
 		module.setStatut(modulesDTO.getStatut());
 		module.setDateModification(new Date());
 

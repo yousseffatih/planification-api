@@ -103,7 +103,8 @@ public class SallesController {
 
 	@PostMapping("")
 	public ResponseEntity<?> addClasse(@Valid @RequestBody SallesDTO sallesDTO) {
-		boolean ifNomExist = sallesRepository.existsByNomAndStatutNot(sallesDTO.getNom(), GlobalConstant.STATUT_DELETE);
+		boolean ifNomExist = sallesRepository.existsByNomAndStatutNot(GlobalConstant.formatName(sallesDTO.getNom()),
+				GlobalConstant.STATUT_DELETE);
 		if (ifNomExist) {
 			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
 					.body(new MessageResponse("Le nom existe déjà !", "warning"));
@@ -125,7 +126,7 @@ public class SallesController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateClasses(@PathVariable Long id, @Valid @RequestBody SallesDTO sallesDTO) {
-		boolean ifNomModifExists = sallesRepository.existsByNomModif(sallesDTO.getNom(), id);
+		boolean ifNomModifExists = sallesRepository.existsByNomModif(GlobalConstant.formatName(sallesDTO.getNom()), id);
 		if (ifNomModifExists) {
 			return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
 					.body(new MessageResponse("Le nom existe déjà !", "warning"));

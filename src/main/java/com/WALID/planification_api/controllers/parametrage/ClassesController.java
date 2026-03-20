@@ -54,7 +54,7 @@ public class ClassesController {
 
     @PostMapping("")
     public ResponseEntity<?> addClasse(@Valid @RequestBody ClassesDTO classesDTO) {
-        boolean ifNomExist = classesRepository.existsByNomAndStatutNot(classesDTO.getNom(),
+        boolean ifNomExist = classesRepository.existsByNomAndStatutNot(GlobalConstant.formatName(classesDTO.getNom()),
                 GlobalConstant.STATUT_DELETE);
         if (ifNomExist) {
             return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
@@ -77,7 +77,8 @@ public class ClassesController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClasses(@PathVariable Long id, @Valid @RequestBody ClassesDTO classesDTO) {
-        boolean ifNomModifExists = classesRepository.existsByNomModif(classesDTO.getNom(), id);
+        boolean ifNomModifExists = classesRepository.existsByNomModif(GlobalConstant.formatName(classesDTO.getNom()),
+                id);
         if (ifNomModifExists) {
             return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
                     .body(new MessageResponse("Le nom existe déjà !", "warning"));
