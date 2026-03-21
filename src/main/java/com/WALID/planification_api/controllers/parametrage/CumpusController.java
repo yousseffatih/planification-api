@@ -57,7 +57,8 @@ public class CumpusController {
     @PostMapping("")
     public ResponseEntity<?> addClasse(@Valid @RequestBody CumpusDTO cumpusDTO) {
 
-        boolean ifNomExist = cumpusRepository.existsByNomAndStatut(cumpusDTO.getNom(), GlobalConstant.STATUT_DELETE);
+        boolean ifNomExist = cumpusRepository.existsByNomAndStatutNot(GlobalConstant.formatName(cumpusDTO.getNom()),
+                GlobalConstant.STATUT_DELETE);
         if (ifNomExist) {
             return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
                     .body(new MessageResponse("Le nom existe déjà !", "warning"));
@@ -78,6 +79,12 @@ public class CumpusController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClasses(@PathVariable Long id, @Valid @RequestBody CumpusDTO cumpusDTO) {
+        boolean ifNomExist = cumpusRepository.existsByNomAndStatutNot(GlobalConstant.formatName(cumpusDTO.getNom()),
+                GlobalConstant.STATUT_DELETE);
+        if (ifNomExist) {
+            return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+                    .body(new MessageResponse("Le nom existe déjà !", "warning"));
+        }
         cumpusService.updateCumpus(id, cumpusDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Cumpus modifiée.", "success"));
 

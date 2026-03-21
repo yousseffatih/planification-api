@@ -68,7 +68,7 @@ public class SallesServicesImp implements InSallesServices {
 		salles.setDateCreation(new Date());
 		salles.setStatut(sallesDTO.getStatut());
 		salles.setNom(GlobalConstant.formatName(sallesDTO.getNom()));
-		salles.setLibelle(salles.getNom());
+		salles.setLibelle(sallesDTO.getNom());
 		salles.setStatut(GlobalConstant.STATUT_ACTIF);
 		salles.setMaxEffective(sallesDTO.getMaxEffective());
 		salles.setTypeSalle(typeSalle);

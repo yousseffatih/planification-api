@@ -57,7 +57,8 @@ public class VillesController {
     @PostMapping("")
     public ResponseEntity<?> addClasse(@Valid @RequestBody VillesDTO villesDTO) {
 
-        boolean ifExist = villesRepository.existsByNomAndStatutNot(villesDTO.getNom(), GlobalConstant.STATUT_ACTIF);
+        boolean ifExist = villesRepository.existsByNomAndStatutNot(GlobalConstant.formatName(villesDTO.getNom()),
+                GlobalConstant.STATUT_DELETE);
         if (ifExist) {
             return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
                     .body(new MessageResponse("Le nom existe déjà !", "warning"));
@@ -84,6 +85,13 @@ public class VillesController {
         // ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR) .body(new
         // MessageResponse("Veuillez entrer un motif pour ce statut.", "warning"));
         // }
+
+        boolean ifExist = villesRepository.existsByNomAndStatutNot(GlobalConstant.formatName(villesDTO.getNom()),
+                GlobalConstant.STATUT_DELETE);
+        if (ifExist) {
+            return ResponseEntity.status(GlobalConstant.HTTPSTATUT_RESPONSE_ERORR)
+                    .body(new MessageResponse("Le nom existe déjà !", "warning"));
+        }
         villesServices.updateVille(id, villesDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Ville modifiée.", "success"));
 
