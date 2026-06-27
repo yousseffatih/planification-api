@@ -28,7 +28,7 @@ public class SallesServicesImp implements InSallesServices {
 
 	@Override
 	public List<SallesDTO> getAllSalles() {
-		List<Salles> salles = sallesRepository.getSallesListApi();
+		List<Salles> salles = sallesRepository.findAllWithStatus();
 		return salles.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
@@ -95,8 +95,13 @@ public class SallesServicesImp implements InSallesServices {
 				.findByIdAndStatut(sallesDTO.getIdTypeSalle(), GlobalConstant.STATUT_ACTIF)
 				.orElseThrow(() -> new ResourceNotFoundException("Type de salle", "id", sallesDTO.getIdTypeSalle()));
 		salles.setNom(GlobalConstant.formatName(sallesDTO.getNom()));
-		salles.setLibelle(salles.getNom());
+		salles.setLibelle(sallesDTO.getNom());
 		salles.setStatut(sallesDTO.getStatut());
+		if (sallesDTO.getStatut().equals(GlobalConstant.STATUT_INACTIF)) {
+			salles.setMotif(sallesDTO.getMotif());
+		} else {
+			salles.setMotif("");
+		}
 		salles.setDateModification(new Date());
 		salles.setMaxEffective(sallesDTO.getMaxEffective());
 		salles.setTypeSalle(typeSalleAttribut);
@@ -112,7 +117,7 @@ public class SallesServicesImp implements InSallesServices {
 			dto.setLibelle(x.getLibelle());
 		}
 		dto.setMaxEffective(x.getMaxEffective());
-
+		dto.setMotif(x.getMotif());
 		dto.setIdTypeSalle(x.getTypeSalle().getId());
 		dto.setLibelleTypeSalle(x.getTypeSalle().getLibelle());
 		dto.setStatut(x.getStatut());

@@ -305,16 +305,16 @@ public class PlanificationService implements InPlanificationService {
 		dto.setTimeFin(x.getTimeFin());
 
 		dto.setIdModule(x.getModule().getId());
-		dto.setLibelleModule(x.getModule().getNom());
+		dto.setLibelleModule(x.getModule().getLibelle());
 
 		dto.setIdSalle(x.getSalle().getId());
-		dto.setLibelleSalle(x.getSalle().getNom());
+		dto.setLibelleSalle(x.getSalle().getLibelle());
 
 		dto.setIdProfesseur(x.getProfesseur().getId());
-		dto.setLibelleProfeseur(x.getProfesseur().getNom());
+		dto.setLibelleProfeseur(x.getProfesseur().getLibelle());
 
 		dto.setIdProfesseur(x.getProfesseur().getId());
-		dto.setLibelleProfeseur(x.getProfesseur().getNom());
+		dto.setLibelleProfeseur(x.getProfesseur().getLibelle());
 
 		dto.setIdTypePlanification(x.getTypePlanification().getId());
 		dto.setLibelleTypePlanification(x.getTypePlanification().getLibelle());

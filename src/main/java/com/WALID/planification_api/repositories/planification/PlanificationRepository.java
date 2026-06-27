@@ -93,7 +93,7 @@ public interface PlanificationRepository extends JpaRepository<Planifications, L
 			    cu.libelle AS libelleCumpus,
 			    v.id AS idVille,
 			    v.libelle AS libelleVille,
-			    GROUP_CONCAT(c.id ORDER BY c.id SEPARATOR ', ') AS libelleClasses
+			    GROUP_CONCAT(DISTINCT c.libelle ORDER BY c.libelle SEPARATOR ', ') AS libelleClasses
 			FROM planifications p
 			LEFT JOIN professeur pr ON p.professeur_id = pr.id
 			LEFT JOIN modules m ON p.module_id = m.id

@@ -26,7 +26,7 @@ public class Modules extends ClassEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Size(max = 20)
-	@Column(name = "NOM", length = 20)
+	@Size(max = 200)
+	@Column(name = "NOM", length = 200)
 	private String nom;
 }

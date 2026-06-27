@@ -41,4 +41,6 @@ public class SallesDTO {
 	private Long idTypeSalle;
 
 	private String libelleTypeSalle;
+
+	private String motif;
 }

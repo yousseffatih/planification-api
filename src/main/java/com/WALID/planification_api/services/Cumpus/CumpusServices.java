@@ -32,12 +32,6 @@ public class CumpusServices implements InCumpusService {
 
 		List<Cumpus> cumpus = new ArrayList<>(cumpusRepository.findAllWithStatus());
 
-		Cumpus addCumpus = new Cumpus();
-		addCumpus.setId(0L);
-		addCumpus.setNom("tous_les_cumpus");
-		addCumpus.setLibelle("TOUS LES CUMPUS");
-		cumpus.add(addCumpus);
-
 		return cumpus.stream().map((c) -> mapToDTO(c)).collect(Collectors.toList());
 	}
 
@@ -45,10 +39,6 @@ public class CumpusServices implements InCumpusService {
 	public List<ListAttributAUTO> getCumpusListApi() {
 		List<Cumpus> cumpus = new ArrayList<>(cumpusRepository.getClassesListApi());
 
-		Cumpus addCumpus = new Cumpus();
-		addCumpus.setId(0L);
-		addCumpus.setNom("tous_les_cumpus");
-		addCumpus.setLibelle("TOUS LES CUMPUS");
 		return cumpus.stream().map((c) -> mapToList(c)).collect(Collectors.toList());
 	}
 
