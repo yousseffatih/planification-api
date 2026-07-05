@@ -1,7 +1,6 @@
 package com.WALID.planification_api.repositories.planification;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,7 +114,7 @@ public interface PlanificationRepository extends JpaRepository<Planifications, L
 			GROUP BY p.id, p.nom, p.date_planification, p.time_debut, p.time_fin,
 			         p.statut, p.prof, pr.id, pr.nom, pr.prenom, m.id, m.nom,
 			         s.id, s.nom, u.id, u.nom, p.description, tp.libelle, tp.id
-			ORDER BY p.date_planification DESC
+			ORDER BY p.date_planification
 			""", countQuery = """
 			SELECT COUNT(DISTINCT p.id)
 			FROM planifications p

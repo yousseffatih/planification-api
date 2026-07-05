@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.WALID.planification_api.constants.GlobalConstant;
 import com.WALID.planification_api.entities.Classes;
+import com.WALID.planification_api.entities.Cumpus;
 import com.WALID.planification_api.entities.ListAttribut;
 import com.WALID.planification_api.entities.Modules;
 import com.WALID.planification_api.entities.PlanificationClasse;
@@ -28,6 +29,7 @@ import com.WALID.planification_api.playload.DTO.PlanificationsDTO;
 import com.WALID.planification_api.playload.DTO.PlanificationsDTOProjection;
 import com.WALID.planification_api.repositories.UserRepository;
 import com.WALID.planification_api.repositories.Parametrage.ClassesRepository;
+import com.WALID.planification_api.repositories.Parametrage.CumpusRepository;
 import com.WALID.planification_api.repositories.Parametrage.ListAttributRepository;
 import com.WALID.planification_api.repositories.Parametrage.ModulesRepository;
 import com.WALID.planification_api.repositories.Parametrage.ProfesseurRepository;
@@ -61,6 +63,9 @@ public class PlanificationService implements InPlanificationService {
 	@Autowired
 	private ListAttributRepository listAttributRepository;
 
+	@Autowired
+	private CumpusRepository cumpusRepository;
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Planifications addPlanification(PlanificationsDTO planificationsDTO) throws Exception {
@@ -90,6 +95,11 @@ public class PlanificationService implements InPlanificationService {
 				.orElseThrow(() -> new ResourceNotFoundException("Type Plaification", "id",
 						planificationsDTO.getIdTypePlanification()));
 
+		Cumpus cumpus = cumpusRepository.findById(planificationsDTO.getIdCumpus())
+				.orElseThrow(() -> new ResourceNotFoundException("Cumpus", "id",
+						planificationsDTO.getIdTypePlanification()));
+		;
+
 		// 👉 First calculate total effectif
 		int totaleElement = 0;
 		List<Classes> classes = new ArrayList<>();
@@ -118,6 +128,7 @@ public class PlanificationService implements InPlanificationService {
 		planification.setSalle(salles);
 		planification.setProfesseur(prof);
 		planification.setTypePlanification(typePlanification);
+		planification.setCumpus(cumpus);
 
 		planification = planificationRepository.save(planification);
 
